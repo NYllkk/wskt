@@ -1,3 +1,94 @@
+// In the f'inal execution 
+// server.js
+const http = require("http");
+const express = require("express");
+const cors = require("cors");
+const socketIO = require("socket.io");
+
+
+const app = express();
+const port = 2000;
+const users = {};
+
+app.use(cors());
+app.get("/", (req, res) => {
+    res.send("Working in the Backend");
+});
+
+const server = http.createServer(app);
+const io = socketIO(server);
+// const activePrivateChats = new Map();
+io.on("connection", (socket) => {
+    console.log("New Connection", socket.id);
+    socket.on("joined", ({ user }) => {
+        console.log("user before extracting id ", user);
+        users[socket.id] = user;
+        console.log("user after extracting id  ", users[socket.id]);
+        console.log(`${user} has joined `);
+        socket.broadcast.emit("userJoined", {
+            user: "Admin",
+            message: ` ${users[socket.id]} has joined`,
+        });
+        socket.emit("welcome", {
+            user: "Admin",
+            message: `Welcome to the chat ${users[socket.id]} `,
+        });
+    });
+    socket.on("message", ({ userInput: message, id }) => {
+        console.log("Received message:", message, "from user with id:", id);
+        io.emit("sendMessage", { user: users[id], message, id });
+    });
+    // for private 
+    socket.on("privatechatStart", ({ recipientSocketId }) => {
+        const chatRoomId = generateUniqueChatRoomId(socket.id, recipientSocketId);
+        console.log(chatRoomId, "in here before join socket chat Room id ")
+        socket.join(chatRoomId);
+        io.to(recipientSocketId).emit("privateChatInitiated", { chatRoomId });
+        console.log("chat room id ", chatRoomId)
+    });
+    socket.on("privateMessage", ({ chatRoomId, message }) => {
+        io.to(chatRoomId).emit("privateMessage", { sender: socket.id, message });
+    });
+    // socket.on("privatehi", (data) => {
+    //     console.log(data, "in private getting data ");
+    //     socket.emit("privatedata", data);
+    // });
+    // socket.on("privateMessage", (data) => {
+    //     console.log(data, "consoling data in db ");
+    //     socket.emit("finalprivatemessage", {
+    //         recipient: data.recipient,
+    //         message: data.message,
+    //     });
+    //     console.log(message, "in finalprivatemessage ");
+    // });
+    socket.on("disconnect", () => {
+        socket.broadcast.emit("leave", {
+            user: "Admin",
+            message: `${users[socket.id]}  has left`,
+        });
+        console.log(`user left`);
+    });
+});
+function generateUniqueChatRoomId(user1, user2) {
+    return `${user1}_${user2}`;
+}
+server.listen(port, () => {
+    console.log(`working on ${port}`);
+});
+
+
+// ///////////////
+
+
+
+
+
+
+
+
+//  before week[lnd]
+
+
 // const express = require("express");
 // const { Server } = require("socket.io");
 // const { createServer } = require("http");
@@ -118,67 +209,54 @@
 
 
 
-// In the f'inal execution 
-// server.js
-const http = require("http");
-const express = require("express");
-const cors = require("cors");
-const socketIO = require("socket.io");
-
-const app = express();
-const port = 2000;
-
-const users = {};
-
-app.use(cors());
-app.get("/", (req, res) => {
-    res.send("Working in the Backend");
-});
-
-const server = http.createServer(app);
-const io = socketIO(server);
-
-io.on("connection", (socket) => {
-    console.log("New Connection", socket.id);
-
-    socket.on("joined", ({ user }) => {
-        console.log("user before extracting id ", user);
-        users[socket.id] = user;
-        console.log("user after extracting id  ", users[socket.id]);
-        console.log(`${user} has joined `);
-
-        socket.broadcast.emit("userJoined", {
-            user: "Admin",
-            message: ` ${users[socket.id]} has joined`,
-        });
-
-        socket.emit("welcome", {
-            user: "Admin",
-            message: `Welcome to the chat ${users[socket.id]} `,
-        });
-    });
-
-    socket.on("message", ({ message, id }) => {
-        console.log("Received message:", message, "from user with id:", id);
-        io.emit("sendMessage", { user: users[id], message, id });
-    });
-
-    // 
 
 
 
-    socket.on("disconnect", () => {
-        socket.broadcast.emit("leave", {
-            user: "Admin",
-            message: `${users[socket.id]}  has left`,
-        });
-        console.log(`user left`);
-    });
-});
-
-server.listen(port, () => {
-    console.log(`working on ${port}`);
-});
+// for private room id 
 
 
-// ///////////////
+
+
+
+
+
+// server.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });
+
+// function generateUniqueChatRoomId(user1, user2) {
+//     return `${user1}_${user2}`;
+// }
+
+
+// .......
+
+
+
+
+
+// io.on("connection", (socket) => {
+//     console.log("New Connection", socket.id);
+
+
+
+//     socket.on("disconnect", () => {
+//         console.log(`User with socket ID ${socket.id} has left`);
+//     });
+// });
+
+// server.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });
+
+// function generateUniqueChatRoomId(user1, user2) {
+//     return `${user1}_${user2}`;
+// }
+
+
+
+
+
+function generateUniqueChatRoomId(user1, user2) {
+    return `${user1}_${user2}`;
+}

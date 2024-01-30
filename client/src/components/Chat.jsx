@@ -17,41 +17,35 @@ const Chat = () => {
     if (socket) {
       socket.emit("message", { userInput, id });
     }
-
     document.getElementById("userInput").value = "";
     setShow((prevShow) => [...prevShow, userInput]);
     console.log(show, "in here with the final user message ");
   };
   useEffect(() => {
     const socket = io(url, { transports: ["websocket"] });
-
     socket.on("connect", () => {
       console.log("connected");
       setid(socket.id);
       console.log(socket.id, "socket gets consoled ");
     });
-
     setSocket(socket);
-
     socket.emit("joined", { user });
-
     socket.on("welcome", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessages((msg) => [...msg, data]);
       console.log("here in message with data object", data);
       console.log(data.user, data.message);
     });
-
     socket.on("userJoined", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessages((msg) => [...msg, data]);
       console.log(data.user, data.message);
     });
     socket.on("leave", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessages((msg) => [...msg, data]);
       console.log(data.user, data.message);
     });
-
     socket.on("sendMessage", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      console.log(data, "in send message ");
+      setMessages((msg) => [...msg, data]);
       console.log(
         "Received message:",
         data.message,
@@ -79,9 +73,9 @@ const Chat = () => {
         ))}
       </div>
       <div>
-        {show.map((show, index) => (
+        {/* {show.map((show, index) => (
           <p key={index}>{show}</p>
-        ))}
+        ))} */}
       </div>
       <input type="text" id="userInput" />
       <button onClick={sendChat}>SendMessage</button>
@@ -91,6 +85,7 @@ const Chat = () => {
 
 export default Chat;
 
+//
 //
 // import React, { useEffect, useState } from 'react'
 // import { user } from "../Join/Join";
@@ -177,3 +172,73 @@ export default Chat;
 // }
 
 // export default Chat
+
+// pri
+//
+// import React, { useState, useEffect } from 'react';
+// import io from 'socket.io-client';
+
+// const PrivateChat = () => {
+//   const [socket, setSocket] = useState(null);
+//   const [recipient, setRecipient] = useState('');
+//   const [message, setMessage] = useState('');
+
+//   useEffect(() => {
+//     // Connect to the Socket.io server
+//     const socketInstance = io('http://localhost:3000'); // Replace with your server URL
+//     setSocket(socketInstance);
+
+//     // Cleanup on component unmount
+//     return () => {
+//       socketInstance.disconnect();
+//     };
+//   }, []);
+
+//   const handleSendMessage = (e) => {
+//     e.preventDefault();
+//     // Send private message to the server
+//     socket.emit('privateMessage', { recipient, message });
+//     // Clear input fields
+//     setRecipient('');
+//     setMessage('');
+//   };
+
+//   useEffect(() => {
+//     // Listen for incoming private messages
+//     if (socket) {
+//       socket.on('privateMessage', (data) => {
+//         console.log('Private message received:', data);
+//         // Handle the incoming private message as needed
+//       });
+//     }
+//   }, [socket]);
+
+//   return (
+//     <div>
+//       <h1>Private Chat</h1>
+//       <form onSubmit={handleSendMessage}>
+//         <label htmlFor="recipient">Recipient:</label>
+//         <input
+//           type="text"
+//           id="recipient"
+//           value={recipient}
+//           onChange={(e) => setRecipient(e.target.value)}
+//           required
+//         />
+//         <br />
+//         <label htmlFor="message">Message:</label>
+//         <input
+//           type="text"
+//           id="message"
+//           value={message}
+//           onChange={(e) => setMessage(e.target.value)}
+//           required
+//         />
+//         <br />
+//         <button type="submit">Send Private Message</button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default PrivateChat;

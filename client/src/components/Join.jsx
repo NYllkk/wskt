@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
 let user;
@@ -10,16 +10,25 @@ const sendUser = () => {
 };
 
 const Join = () => {
+  const navigate = useNavigate();
   const [name, setname] = useState("");
   useEffect(() => {
     const url = "http://localhost:2000";
     const socket = io(url, { transports: ["websocket"] });
-
     socket.on("connect", () => {
       console.log("connection");
     });
   }, []);
-
+  const handleNavigate = (e) => {
+    if (name.length > 3) {
+      navigate("chat");
+    }
+  };
+  window.addEventListener("beforeunload", function (event) {
+    const confirmationMessage = "Are you sure you want to leave?";
+    event.returnValue = confirmationMessage;
+    return confirmationMessage;
+  });
   return (
     <div>
       <h2>Chat</h2>
@@ -29,11 +38,11 @@ const Join = () => {
         type="text"
         id="joinInput"
       />
-      <Link to="/chat">
-        <button onClick={sendUser} type="submit">
+      <div onClick={sendUser}>
+        <button onClick={handleNavigate} type="submit">
           Start Chat
         </button>
-      </Link>
+      </div>
     </div>
   );
 };
@@ -73,3 +82,11 @@ export { user };
 
 // export default Join
 // export { user }
+
+//
+// User
+// how to make it work ?  <Link onClick={(e) => e.target.value === ""? e.preventDefault():to="/chat">}
+//         <button onClick={sendUser} type="submit">
+//           Start Chat
+//         </button>
+//       </Link>

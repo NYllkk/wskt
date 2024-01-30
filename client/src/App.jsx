@@ -111,6 +111,7 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Join from "./components/Join";
 import Chat from "./components/Chat";
+import Private from "./components/Private";
 
 function App() {
   return (
@@ -118,6 +119,7 @@ function App() {
       <Routes>
         <Route path="/" Component={Join} />
         <Route path="/chat" Component={Chat} />
+        <Route path="/private" Component={Private} />
       </Routes>
     </>
   );
