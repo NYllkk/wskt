@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { user } from "./Join";
-
 const url = "http://localhost:2000";
 
 const Chat = () => {

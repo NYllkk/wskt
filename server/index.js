@@ -17,7 +17,6 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app);
 const io = socketIO(server);
-// const activePrivateChats = new Map();
 io.on("connection", (socket) => {
     console.log("New Connection", socket.id);
     socket.on("joined", ({ user }) => {
@@ -35,32 +34,28 @@ io.on("connection", (socket) => {
         });
     });
     socket.on("message", ({ userInput: message, id }) => {
-        console.log("Received message:", message, "from user with id:", id);
+        console.log("Received message:", message, "from user with id:", id, "for other Route");
         io.emit("sendMessage", { user: users[id], message, id });
     });
-    // for private 
-    socket.on("privatechatStart", ({ recipientSocketId }) => {
-        const chatRoomId = generateUniqueChatRoomId(socket.id, recipientSocketId);
-        console.log(chatRoomId, "in here before join socket chat Room id ")
-        socket.join(chatRoomId);
-        io.to(recipientSocketId).emit("privateChatInitiated", { chatRoomId });
-        console.log("chat room id ", chatRoomId)
+    // for private ,,,...........
+    socket.on("message", ({ room, message, }) => {
+        console.log({ room, message }, "in here with room and message ");
+        socket.to(room).emit("receiveMessage", message);
+        // wil se this may be here i have to use socket.emit
+        io.emit("messagetoAll", message)
+        console.log(message, "message in messageto all ")
     });
-    socket.on("privateMessage", ({ chatRoomId, message }) => {
-        io.to(chatRoomId).emit("privateMessage", { sender: socket.id, message });
+    // sending to aa specifcc room 
+    socket.on("joinRoom", (room) => {
+        // socket.join and socket.on are wroking th esame  
+        socket.join(room);
+        console.log(room, "here geeting the room in the server")
+        console.log(`User joined room ${room}`);
     });
-    // socket.on("privatehi", (data) => {
-    //     console.log(data, "in private getting data ");
-    //     socket.emit("privatedata", data);
-    // });
-    // socket.on("privateMessage", (data) => {
-    //     console.log(data, "consoling data in db ");
-    //     socket.emit("finalprivatemessage", {
-    //         recipient: data.recipient,
-    //         message: data.message,
-    //     });
-    //     console.log(message, "in finalprivatemessage ");
-    // });
+
+
+    // upper wil ad to room to specific user 
+
     socket.on("disconnect", () => {
         socket.broadcast.emit("leave", {
             user: "Admin",
@@ -69,9 +64,6 @@ io.on("connection", (socket) => {
         console.log(`user left`);
     });
 });
-function generateUniqueChatRoomId(user1, user2) {
-    return `${user1}_${user2}`;
-}
 server.listen(port, () => {
     console.log(`working on ${port}`);
 });
@@ -81,182 +73,3 @@ server.listen(port, () => {
 
 
 
-
-
-
-
-
-//  before week[lnd]
-
-
-// const express = require("express");
-// const { Server } = require("socket.io");
-// const { createServer } = require("http");
-// const cors = require("cors");
-// const cookieParser = require("cookie-parser");
-// require("dotenv").config();
-// const { sequelize } = require("./sequelize.js");
-// const { message } = require("statuses");
-// const app = express();
-// const server = createServer(app);
-// app.use(cors())
-// const io = new Server(server, {
-//     cors: {
-//         origin: "http://localhost:5173",
-//         methods: ["GET", "POST"],
-//         credentials: true,
-//     },
-// });
-// const secretKey = process.env.SECRET_KEY;
-// const port = process.env.PORT;
-// app.get("/", (req, res) => {
-//     res.send("hi");
-// });
-// io.on("connection", (socket) => {
-//     console.log("user connected ", socket.id)
-//     socket.emit("hi", "hello from the server")
-//     // 
-//     socket.on("sendingmessage", (message, callback) => {
-//         console.log(`Recieved message from ${socket.id} : ${message}`)
-//     })
-//     socket.on("change", (data) => {
-//         console.log("recieve from client in chnageChnage ", data)
-//         socket.emit("recieved", data)
-//     })
-//     socket.on("finalData", (gettingdata) => {
-//         console.log(gettingdata, "on handleSubmit getting the data ")
-//         socket.emit("finally", gettingdata)
-//     })
-//     socket.on('groupmessage', (data) => {
-//         socket.broadcast.emit('groupmessage', {
-//             user: socket.id,
-//             message: data.message,
-//         });
-//         socket.on("join", (firstroom) => {
-//             socket.join(firstroom)
-//         })
-//         console.log(data, "in data");
-//         // socket.emit("recieved", data); // 
-//         // socket.on("disconnect", () => {
-//         //     console.log("user disconneted ");
-//         // });
-//     });
-// })
-
-// app.use((err, req, res, next) => {
-//     console.log(err)
-//     res.status(500).send("internal server wrror ")
-//     return
-// })
-// server.listen(port, () => {
-//     console.log(`Server is listening on ${port}`);
-// });
-// (async () => {
-//     try {
-//         await sequelize.authenticate();
-//         console.log('Database connection successful!');
-//     } catch (error) {
-//         console.error('Unable to connect to the database:', error);
-//         process.exit(1);
-//     }
-// })();
-
-//  latet one
-// const express = require('express');
-// const app = express();
-// const http = require('http');
-// const { Server } = require('socket.io');
-// const server = http.createServer(app);
-// const io = new Server(server)
-// const cors = require("cors")
-// const port = 2000
-// app.use(cors())
-
-// app.get("/", (req, res) => {
-//     res.send("hello from the server ")
-// })
-
-// io.on("connection", (socket) => {
-//     console.log("a user connected")
-// })
-
-// server.listen(port, () => {
-//     console.log(`server is listening on ${port}`)
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// socket.on('joinRoom', (roomName) => {
-//     // Join the specified room
-//     socket.join(roomName);
-//     console.log(`User ${socket.id} joined room ${roomName}`);
-// });
-
-
-
-
-
-
-
-
-
-// for private room id 
-
-
-
-
-
-
-
-// server.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
-
-// function generateUniqueChatRoomId(user1, user2) {
-//     return `${user1}_${user2}`;
-// }
-
-
-// .......
-
-
-
-
-
-// io.on("connection", (socket) => {
-//     console.log("New Connection", socket.id);
-
-
-
-//     socket.on("disconnect", () => {
-//         console.log(`User with socket ID ${socket.id} has left`);
-//     });
-// });
-
-// server.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
-
-// function generateUniqueChatRoomId(user1, user2) {
-//     return `${user1}_${user2}`;
-// }
-
-
-
-
-
-function generateUniqueChatRoomId(user1, user2) {
-    return `${user1}_${user2}`;
-}
