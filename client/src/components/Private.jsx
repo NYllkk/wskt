@@ -11,6 +11,7 @@ const Private = () => {
   const [room, setRoom] = useState("");
   const [socketID, setSocketId] = useState("");
   const [roomName, setRoomName] = useState("");
+  const [getRooom, setgetRoom] = useState("");
 
   const url = "http://localhost:2000";
   const socket = io(url, { transports: ["websocket"] });
@@ -31,6 +32,14 @@ const Private = () => {
       console.log(data, "in here client side with alll message ");
       setMessages((message) => [...message, data]);
     });
+    socket.on("roomJoined", (message) => {
+      console.log("roomJoined with ");
+      console.log(message, "in here after recieving the message ");
+    });
+    socket.on("congratstojoin", (data) => {
+      setgetRoom((getRooom) => [...getRooom, data]);
+      console.log(data, "in here final data ");
+    });
     return () => {
       socket.disconnect();
     };
@@ -50,6 +59,7 @@ const Private = () => {
       <Box sx={{ marginTop: "15px" }}>
         <Card sx={{ maxWidth: 345, marginTop: "25px" }}>
           {/* <CardMedia sx={{ height: 140 }} image="dc" title="green iguana" /> */}
+          <Box>{getRooom}</Box>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {socketID}
@@ -161,3 +171,97 @@ export default Private;
 //     </Card>
 //   );
 // }
+
+// const Header = () => {
+//   const handleCloseNavMenu = () => {
+//     setAnchorElNav(null);
+//   };
+
+//   const handleCloseUserMenu = () => {
+//     setAnchorElUser(null);
+//   };
+
+//   return (
+//     <AppBar position="static">
+//       <Container
+//         maxWidth="100%"
+//         sx={{ backgroundColor: "#055558", width: "100%" }}
+//       >
+//         <Toolbar disableGutters sx={{}}>
+//           <Link to="/chat" style={{ textDecoration: "none" }}>
+//             <MdKeyboardBackspace
+//               style={{ marginRight: "30px", color: "white" }}
+//             />
+//           </Link>
+//           <Typography
+//             variant="h6"
+//             noWrap
+//             sx={{
+//               mr: 2,
+//               display: { xs: "none", md: "flex" },
+//               fontFamily: "monospace",
+//               fontWeight: 700,
+//               letterSpacing: ".3rem",
+//               color: "inherit",
+//               textDecoration: "none",
+//             }}
+//           >
+//             <IconButton sx={{ p: 0 }}>
+//               <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+//             </IconButton>
+//           </Typography>
+//           <Box
+//             sx={{
+//               flexGrow: 1,
+//               display: {
+//                 xs: "none",
+//                 md: "flex",
+//                 lg: "flex",
+//                 flexDirection: "column",
+//                 justifyContent: "space-between", // Distribute items along the main axis
+//               },
+//             }}
+//           >
+//             <h4>Name</h4>
+//             <div style={{ flex: 1 }}></div>
+//             <p>Surname</p>
+//           </Box>
+
+//           <Box sx={{ flexGrow: 0, backgroundColor: "#", color: "white" }}>
+//             <Tooltip>
+//               <IconButton
+//                 sx={{ color: "white", display: "flex", gap: "20px" }}
+//                 disableRipple
+//               >
+//                 <FaVideo />
+//                 <MdCall />
+//                 <BiDotsVerticalRounded />
+//               </IconButton>
+//             </Tooltip>
+//             <Menu
+//               sx={{ mt: "45px" }}
+//               id="menu-appbar"
+//               anchorOrigin={{
+//                 vertical: "top",
+//                 horizontal: "right",
+//               }}
+//               keepMounted
+//               transformOrigin={{
+//                 vertical: "top",
+//                 horizontal: "right",
+//               }}
+//               onClose={handleCloseUserMenu}
+//             >
+//               {settings.map((setting) => (
+//                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
+//                   <Typography textAlign="center">{setting}</Typography>
+//                 </MenuItem>
+//               ))}
+//             </Menu>
+//           </Box>
+//         </Toolbar>
+//       </Container>
+//     </AppBar>
+//   );
+// };
+// export default Header;

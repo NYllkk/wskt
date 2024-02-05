@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { user } from "./Join";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 const url = "http://localhost:2000";
 
 const Chat = () => {
@@ -32,7 +33,7 @@ const Chat = () => {
     socket.on("welcome", (data) => {
       setMessages((msg) => [...msg, data]);
       console.log("here in message with data object", data);
-      console.log(data.user, data.message);
+      console.log(data.user, data.message, data.online);
     });
     socket.on("userJoined", (data) => {
       setMessages((msg) => [...msg, data]);
@@ -54,30 +55,67 @@ const Chat = () => {
         data.id
       );
     });
-
     return () => {
       socket.disconnect();
     };
   }, []);
-
   return (
     <>
-      <h2>Chat</h2>
-      <p>{user}&nbsp; Joined Successfully</p>
-      <div>
-        {messages.map((message, index) => (
-          <p key={index}>
-            {message.user}: {message.message}
-          </p>
-        ))}
-      </div>
-      <div>
-        {/* {show.map((show, index) => (
-          <p key={index}>{show}</p>
-        ))} */}
-      </div>
-      <input type="text" id="userInput" />
-      <button onClick={sendChat}>SendMessage</button>
+      <Box>
+        {messages.map((m, i) => {
+          return <p key={i}>{m.online}</p>;
+        })}
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: "white",
+          minHeight: "100%",
+          bottom: "120px",
+          marginTop: "22px",
+        }}
+      >
+        <Container
+          maxWidth="sm"
+          sx={{
+            backgroundColor: "rgb(249 241 243)",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
+            Chat
+          </Typography>
+          <p>&nbsp;{user} </p>
+          <Box>
+            {messages.map((message, index) => (
+              <p
+                style={{ backgroundColor: "#ebe8e8", color: "black" }}
+                key={index}
+              >
+                {message.user}: {message.message}
+              </p>
+            ))}
+          </Box>
+          <Box></Box>
+          <TextField
+            sx={{ color: "black", backgroundColor: "white" }}
+            label="Write Messsage Here ....."
+            type="text"
+            id="userInput"
+          />
+          <Button
+            sx={{
+              backgroundColor: "#ebe8e8",
+              color: "black",
+              margin: "20px",
+              padding: "15px",
+            }}
+            onClick={sendChat}
+          >
+            SendMessage
+          </Button>
+        </Container>
+      </Box>
     </>
   );
 };
@@ -241,3 +279,30 @@ export default Chat;
 // };
 
 // export default PrivateChat;
+
+//  <Box
+//    sx={{
+//      borderRadius: "12px",
+//      borderColor: "black",
+//      borderStyle: "",
+//      display: "flex",
+//      flexDirection: "row",
+//      justifyContent: "space-between",
+//    }}
+//  >
+//    <InputBase
+//      sx={{ ml: 1, flex: 1 }}
+//      placeholder="Search Here"
+//      inputProps={{ "aria-label": "search Here" }}
+//      value={searchTerm}
+//      onChange={(e) => handleChange(e, e.target.value)}
+//    />
+//    <IconButton
+//      type="button"
+//      sx={{ p: "10px" }}
+//      aria-label="search"
+//      disableRipple
+//    >
+//      <SearchIcon sx={{ marginLeft: "120px" }} />
+//    </IconButton>
+//  </Box>;

@@ -14,7 +14,8 @@
 //         // Send a "basicsFromClient" message to the server
 //         socket.emit("basicsFromClient", "Basics from client!");
 //   });
-// 
+//  
+//  
 //   socket.on("disconnect", () => {
 //             console.log("Disconnected from the server");
 //   });

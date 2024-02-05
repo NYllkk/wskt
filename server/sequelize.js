@@ -16,7 +16,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
         process.exit(1);
     }
 })();
-module.exports = { sequelize }
+module.exports = sequelize
 
 // https://github.com/meabhisingh/socket.io
 // Socket.io

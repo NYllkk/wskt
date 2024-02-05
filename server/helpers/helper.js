@@ -16,12 +16,12 @@
 //     socket.on("basicsFromClient", (data) => {
 //         console.log("Received basics from client:", data);
 //     });
-
 //     socket.on("disconnect", () => {
 //         console.log("User disconnected");
+//   and receive updates. later
 //     });
 // });
-
+// "     
 // const port = process.env.PORT || 3000;
 
 // server.listen(port, () => {
