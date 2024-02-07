@@ -6,7 +6,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   Container,
   Checkbox,
-  Link,
   Paper,
   Box,
   Grid,
@@ -17,19 +16,26 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import {
+  registerUser,
+  registerSuccess,
+  registerFailure,
+} from "../redux/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
-
 export default function SignInSide() {
-  const REGISTER_URL = import.meta.env.VITE_REGISTER_URL;
+  const REGISTER_URL = import.meta.env.VITE_BACKEND_URL;
   console.log(REGISTER_URL, "with register Api ");
-
+  const dispatch = useDispatch();
   const validationSchema = Yup.object({
     name: Yup.string().required("name is Required"),
     lastName: Yup.string().required("lastName is Required"),
     email: Yup.string().required("email is Required"),
     password: Yup.string().required("password is Required"),
   });
+  const navigate = useNavigate();
   const initialState = {
     name: "",
     lastName: "",
@@ -38,35 +44,13 @@ export default function SignInSide() {
   };
   const [data, setdata] = useState(initialState);
   const [errors, setErrors] = useState({});
-  // const handleSubmit = async (e) => {
-  //   try {
-  //     setErrors({});
-  //     e.preventDefault();
-  //     await validationSchema.validate(data, { abortEarly: false });
-  //     const response = await axios.post(`${REGISTER_URL}/register`, {
-  //       name: data.name,
-  //       lastName: data.lastName,
-  //       email: data.email,
-  //       password: data.password,
-  //     });
-  //     console.log("in hanbdleSubmit", response);
-  //     setdata({ ...initialState, success: true });
-  //     setTimeout((prev) => {
-  //       setdata({ ...prev, success: false });
-  //     }, 3000);
-  //   } catch (error) {
-  //     const validationErrors = {};
-  //     error.inner.forEach((err) => {
-  //       validationErrors[err.path] = err.message;
-  //     });
-  //     setErrors(validationErrors);
-  //   }
-  // };
+
   const handleSubmit = async (e) => {
     try {
       setErrors({});
       e.preventDefault();
       await validationSchema.validate(data, { abortEarly: false });
+      dispatch(registerUser());
       const response = await axios.post(`${REGISTER_URL}/register`, {
         name: data.name,
         lastName: data.lastName,
@@ -74,11 +58,15 @@ export default function SignInSide() {
         password: data.password,
       });
       console.log("in handleSubmit", response);
+      dispatch(registerSuccess(response.data));
       setdata({ ...initialState, success: true });
       setTimeout(() => {
         setdata({ ...data, success: false });
       }, 3000);
+      navigate("/log");
     } catch (error) {
+      console.log("errror consoling", error);
+      dispatch(registerFailure(error.message));
       const validationErrors = {};
       if (error.inner && Array.isArray(error.inner)) {
         error.inner.forEach((err) => {
@@ -218,6 +206,8 @@ export default function SignInSide() {
                       error={Boolean(errors.password)}
                       helperText={errors.password}
                     />
+
+                    {/*nodemailer  iwor qwag qsrq radx */}
                   </Grid>
                   <Grid item xs={12}>
                     <FormControlLabel
@@ -238,7 +228,7 @@ export default function SignInSide() {
                 </Button>
                 <Grid container justifyContent="flex-end">
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link to="/log" variant="body2">
                       Already have an account? Sign in
                     </Link>
                   </Grid>
@@ -251,65 +241,29 @@ export default function SignInSide() {
     </Container>
   );
 }
-
-// ecxcewwdwwwdwdw
-
-// const handleChange = (e) => {
-//   const { name, value } = e.target;
-//   setdata({
-//     ...data,
-//     [name]: value,
-//   });
-//   validationSchema
-//     .validateAt(name, { [name]: value })
-//     .then(() => {
-//       setErrors((prevErrors) => ({
-//         ...prevErrors,
-//         [name]: null,
-//       }));
-//     })
-//     .catch((error) => {
-//       setErrors((prevErrors) => ({
-//         ...prevErrors,
-//         [name]: error.message,
-//       }));
-//     });
-// };
-
-//  const handleSubmit = async (event) => {
-//    event.preventDefault();
-//    console.log(`Backend URL: ${backendUrl}`);
-//    try {
-//      await validationSchema.validate(data, { abortEarly: false });
-//      // dispatch(loginRequest(data));
-
-//      const res = await axios.post(`${backendUrl}/login`, {
-//        email: data.email,
-//        password: data.password,
-//      });
-//      dispatch(loginSuccess({ user: data, token: res.data.token }));
-//      console.log("Data Submitted");
-//      localStorage.setItem(
-//        "AUTHLOGGEDIN",
-//        JSON.stringify({ email: data.email, name: data.password })
-//      );
-//      navigate("/");
-//    } catch (error) {
-//      dispatch(loginFailure(error.message));
-//      console.log(error);
-//    }
-//  };
-//  <TextField
-//    margin="normal"
-//    required
-//    fullWidth
-//    id="email"
-//    label="Email Address"
-//    name="email"
-//    autoComplete="email"
-//    onChange={handleChange}
-//    value={data.email}
-//    error={Boolean(errors.email)}
-//    helperText={errors.email}
-//    autoFocus
-//  />;
+//
+// <TextField
+//               margin="normal"
+//               required
+//               fullWidth
+//               id="password"
+//               label="password"
+//               name="password"
+//               autoComplete="text"
+//               type={data.showPassword ? "text" : "password"}
+//               value={data.password}
+//               autoFocus
+//               onChange={handleInputChange}
+//               error={errors.password}
+//               helperText={errors.password}
+//               InputProps={{
+//                 endAdornment: (
+//                   <InputAdornment
+//                     position="end"
+//                     onClick={handlePasswordVisibilityToggle}
+//                   >
+//                     {data.showPassword ? <Visibility /> : <VisibilityOff />}
+//                   </InputAdornment>
+//                 ),
+//               }}
+//             />

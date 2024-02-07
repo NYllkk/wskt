@@ -15,10 +15,13 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { user } from "../components/Join";
+import { useSelector } from "react-redux";
+
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = () => {
+  const name = useSelector((state) => state.auth?.user?.user?.email);
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -52,7 +55,7 @@ const Header = () => {
             }}
           >
             <IconButton sx={{ p: 0 }}>
-              <Avatar alt={user} src="/static/images/avatar/2.jpg" />
+              <Avatar alt={name} src="/static/images/avatar/2.jpg" />
             </IconButton>
           </Typography>
           <Box
@@ -128,7 +131,7 @@ const Header = () => {
             }}
           >
             <h4>
-              {user} <br />
+              {name} <br />
             </h4>
           </Box>
           <Box sx={{ flexGrow: 0, backgroundColor: "#", color: "white" }}>

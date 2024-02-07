@@ -6,6 +6,8 @@ import Private from "./components/Private";
 import Experiment from "./pages/Experiment.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ChangePassword from "./pages/ChangePassword.jsx";
 function App() {
   return (
     <>
@@ -14,8 +16,11 @@ function App() {
         <Route path="/chat" Component={Chat} />
         <Route path="/private" Component={Private} />
         <Route path="/ex" Component={Experiment} />
+        {/*  */}
         <Route path="/log" Component={Login} />
         <Route path="/" Component={Register} />
+        <Route path="/forgot" Component={ForgotPassword} />
+        <Route path="/change" Component={ChangePassword} />
       </Routes>
     </>
   );

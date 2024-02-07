@@ -4,11 +4,16 @@ import App from "./App.jsx";
 import "./index.css";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
+import store from "./redux/store.js";
+import { Provider } from "react-redux";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <BrowserRouter>
-      <CssBaseline />
-      <App />
+      <Provider store={store}>
+        <CssBaseline />
+        <App />
+      </Provider>
     </BrowserRouter>
   </>
 );

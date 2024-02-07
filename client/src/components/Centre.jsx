@@ -4,8 +4,8 @@ import EmojiPicker from "emoji-picker-react";
 import { FaRegSmile } from "react-icons/fa";
 import SendIcon from "@mui/icons-material/Send";
 import { user } from "../components/Join";
+import { useSelector } from "react-redux";
 const url = "http://localhost:2000";
-
 const Centre = () => {
   const [id, setid] = useState("");
   const [show, setShow] = useState([]);
@@ -13,18 +13,15 @@ const Centre = () => {
   const [socket, setSocket] = useState(null);
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-
+  const user = useSelector((state) => state.auth?.user?.user?.email);
   const handleEmojiSelect = (emoji) => {
     setSelectedEmoji(emoji);
     // setIsEmojiPickerOpen(false);
   };
-
   const handleToggleEmojiPicker = () => {
     setIsEmojiPickerOpen((prev) => !prev);
   };
-
   console.log(selectedEmoji, "in here with selected emoji");
-
   const sendChat = () => {
     const userInput = document.getElementById("userInput").value;
     console.log(userInput, "here in userInputValue ");
@@ -121,6 +118,7 @@ const Centre = () => {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          padding: "10px",
         }}
       >
         {selectedEmoji && (

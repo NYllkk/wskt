@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { user } from "./Join";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+
 const url = "http://localhost:2000";
 
 const Chat = () => {
@@ -10,6 +12,11 @@ const Chat = () => {
   const [show, setShow] = useState([]);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
+
+  const userName = useSelector((state) => state.auth?.user?.user?.email);
+  console.log(userName, "in selector with UserNAme ");
+  //  const userEmail = useSelector((state) => state.Login?.user?.email);
+  //  const firstName = getFirstWord(userEmail);
 
   const sendChat = () => {
     const userInput = document.getElementById("userInput").value;
@@ -85,7 +92,7 @@ const Chat = () => {
           <Typography variant="h5" sx={{ textAlign: "center" }}>
             Chat
           </Typography>
-          <p>&nbsp;{user} </p>
+          <p>&nbsp;{userName} </p>
           <Box>
             {messages.map((message, index) => (
               <p
