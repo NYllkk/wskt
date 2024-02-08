@@ -17,7 +17,7 @@ function App() {
         <Route path="/chat" Component={Chat} />
         <Route path="/private" Component={Private} />
         <Route path="/ex" Component={Experiment} />
-        {/*  */}
+
         <Route path="/log" Component={Login} />
         <Route path="/" Component={Register} />
         <Route path="/forgot" Component={ForgotPassword} />

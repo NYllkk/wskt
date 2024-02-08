@@ -16,9 +16,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { InputBase } from "@mui/material";
+import { Avatar, InputBase } from "@mui/material";
 
-const drawerWidth = 240;
+const drawerWidth = 440;
 
 function ResponsiveDrawer(props) {
   const { window } = props;
@@ -39,12 +39,19 @@ function ResponsiveDrawer(props) {
     }
   };
   const drawer = (
-    <div>
+    <div style={{backgroundColor:"",height:"100vh"}}>
+      <Box sx={{display:"flex", gap:"40px", padding:"20px", alignContent:"center", alignItems:"center", justifyContent:"space-around", backgroundColor:"green", height:"65px"}}>
+      <Avatar/>
+whjd
+sdce
+wedfwefd
+      </Box>
       <Toolbar />
       <Box
         sx={{
           color: "black",
-          backgroundColor: "#b1bdb1c2",
+          backgroundColor: "",
+
           borderRadius: "12px",
           borderColor: "black",
           borderStyle: "",
@@ -53,6 +60,7 @@ function ResponsiveDrawer(props) {
           // justifyContent: "space-between",
         }}
       >
+        wede
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search Here"
@@ -95,6 +103,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
           </ListItem>
         ))} */}
+        wedef
       </List>
     </div>
   );
