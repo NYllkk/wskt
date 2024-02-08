@@ -4,29 +4,80 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const forgotpass = require("../mailTemplate/forget.js");
 const sendmail = require("../common/sendMail.js");
+const formidable = require("formidable");
+const { processFormFields } = require("../helpers/createtoken.js");
+const { testUserUpload } = require("../common/uploadFile.js");
+const Welcome = require("../mailTemplate/Welcome.js");
+
+
 const Register = async (req, res) => {
-    const { name, lastName, email, password } = req.body;
+    console.log(" here in register ")
+    const form = new formidable.IncomingForm();
     try {
-        const findEmail = await User.findOne({
-            where: { email: email },
-            attributes: {
-                exclude: ["password"]
-            }
-        });
-        if (!findEmail) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const createdUser = await User.create({
-                name, lastName, email, password: hashedPassword,
+        console.log(" here in register1 ")
+        const returndata = await new Promise((resolve, reject) => {
+            console.log("register 1.2")
+            form.parse(req, async (error, fields, files) => {
+                console.log(fields, "here consoling fields")
+                console.log("register 1.3")
+                if (error) {
+                    return reject(new Error("Error occurred during parsing the data."));
+                }
+                console.log(" here in register2 ")
+                try {
+                    const processedData = processFormFields(fields);
+                    const { name, lastName, email, password, PhoneNumber } = processedData;
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    console.log(" here in register3 ")
+                    let profilePictureUrl = "";
+                    console.log(" here in profile picture ")
+                    if (
+                        files.profilePicture &&
+                        Array.isArray(files.profilePicture) &&
+                        files.profilePicture.length > 0
+                    ) {
+                        const uploadedFile = files.profilePicture[0];
+                        const imagePath = uploadedFile.filepath;
+                        const public_id = await testUserUpload(imagePath);
+                        profilePictureUrl = `https://res.cloudinary.com/do7fwlqpn/image/upload/${public_id}`;
+                    }
+                    const existingUser = await User.findOne({
+                        where: {
+                            email, PhoneNumber
+                        },
+                        attributes: { exclude: ["password"] },
+                    });
+                    if (existingUser) {
+                        throw new Error("User with this email or Number already exists.");
+                    }
+                    console.log(" here in register before user created  ")
+                    const newUser = await User.create({
+                        name,
+                        lastName,
+                        email,
+                        PhoneNumber,
+                        password: hashedPassword,
+                        profilePicture: profilePictureUrl,
+                    });
+                    const emailContent = { name: newUser.name }
+                    console.log("in email content")
+                    const { title, description } = Welcome(emailContent)
+                    const info = await sendmail(newUser.email, title, description)
+                    console.log(info, "getting info here ")
+                    resolve({ message: "User created successfully", newUser });
+                    return
+                } catch (error) {
+                    reject(error);
+                }
             });
-            return res.status(200).json({ message: "User Created Successfully", user: createdUser });
-        } else {
-            return res.status(400).json({ error: "Email already exists" });
-        }
+        });
+        res.status(200).json(returndata);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Internal server error" });
     }
 };
+
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -111,7 +162,6 @@ const ResetPassword = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
         await user.save();
-
         return res.json({ message: "Password reset successful" });
     } catch (error) {
         console.log(error);
@@ -127,104 +177,24 @@ module.exports = { Register, login, forgotpasword, ResetPassword }
 
 // http://localhost:2000/api/user/reset
 
-// 
-
-
-
-
-
-// const ResetPassword = async (req, res) => {
-//     const { password } = req.body;
-//     const token = req.params.token;
-//     try {
-//         jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
-//             if (err) {
-//                 return res.status(401).json({ error: 'Invalid or expired token' });
-//             }
-
-//             const userId = decoded.id;
-
-//             // Update the user's password in the database
-//             const user = await User.findByPk(userId);
-//             if (!user) {
-//                 return res.status(404).json({ error: 'User not found' });
-//             }
-
-//             // Update the user's password
-//             user.password = hashPassword(password); // Ensure you hash the password
-//             await user.save();
-
-//             res.json({ message: 'Password reset successfully' });
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({ error: 'Internal server error' });
-//     }
-// };
-
-// 
-// const forgetPassword = async (req, res) => {
-//   const { email } = req.body;
-//   try {
-//     const find = await Admin.findOne({
-//       where: { email: email },
-//       attributes: { exclude: ["password"] },
+// const { name, lastName, email, password } = req.body;
+// try {
+//     const findEmail = await User.findOne({
+//         where: { email: email },
+//         attributes: {
+//             exclude: ["password"]
+//         }
 //     });
-//     if (!find) {
-//       return RES(res, STATUS.NOT_FOUND);
+//     if (!findEmail) {
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         const createdUser = await User.create({
+//             name, lastName, email, password: hashedPassword,
+//         });
+//         return res.status(200).json({ message: "User Created Successfully", user: createdUser });
+//     } else {
+//         return res.status(400).json({ error: "Email already exists" });
 //     }
-//     const tokenc = { id: find.id, email: find.email };
-//     const token = await createToken(tokenc);
-//     res.json({ token });
-//     const url = `https://cloudinary.com/documentation/node_integration${token}`;
-//     const emailContent = { name: find.email, url };
-//     const { title, description } = forgotpass(emailContent);
-//     const info = await sendMail(find.email, title, description);
-//     console.log(info);
-//   } catch (error) {
+// } catch (error) {
 //     console.error(error);
-//     return RES(res, STATUS.INTERNAL_SERVER_ERROR);
-//   }
-// };
-
-
-// final
-// const forgot = async (req, res) => {
-//     const { email } = req.body
-//     try {
-//         if (!email) {
-//             return (RES(res, STATUS.INTERNAL_SERVER_ERROR))
-//         }
-//         const find = await testUser.findOne({
-//             where: { email }
-//         })
-//         if (!find) {
-//             return RES(res, STATUS.NOT_FOUND)
-//         }
-//         console.log(find, "in find ")
-//         const tokenc = {
-//             id: find.id,
-//             email: find.email
-//         }
-//         const token = createToken(tokenc)
-//         await res.json({ token })
-//         const url = `https://cloudinary.com/documentation/node_integration${token}`
-//         const emailContent = {
-//             name: find.email,
-//             url: url
-//         }
-//         const { title, description } = forgotpass(emailContent)
-//         console.log("title", title)
-//         console.log("description", description)
-//         const info = await sendMail(find.email, title, description)
-//         console.log(info, "email info")
-//         await PasswordResetToken.create({
-//             userId: find.id,
-//             token: token,
-//             expiresAt: new Date(Date.now() + 20 * 60 * 1000)
-//         })
-//     } catch (error) {
-//         console.log(error)
-//         return
-//     }
+//     return res.status(500).json({ error: "Internal Server Error" });
 // }

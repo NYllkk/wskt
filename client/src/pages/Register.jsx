@@ -1,3 +1,5 @@
+//  backnd Api complete in front end have to ad PhoneNumber and ProfilePicture
+//  also mail is not
 import { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -13,6 +15,7 @@ import {
   Avatar,
   Button,
   Typography,
+  Stack,
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
@@ -23,40 +26,65 @@ import {
   registerFailure,
 } from "../redux/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-
+import React from "react";
+import { MuiTelInput } from "mui-tel-input";
 const defaultTheme = createTheme();
 export default function SignInSide() {
+  // const [phone, setPhone] = React.useState("");
+  const handleChangee = (newPhone) => {
+    console.log("in here");
+    setdata({
+      ...data,
+      PhoneNumber: newPhone,
+    });
+  };
+
   const REGISTER_URL = import.meta.env.VITE_BACKEND_URL;
-  console.log(REGISTER_URL, "with register Api ");
+  // console.log(REGISTER_URL, "with register Api ");
   const dispatch = useDispatch();
   const validationSchema = Yup.object({
-    name: Yup.string().required("name is Required"),
-    lastName: Yup.string().required("lastName is Required"),
-    email: Yup.string().required("email is Required"),
-    password: Yup.string().required("password is Required"),
+    name: Yup.string().required("Name is Required"),
+    lastName: Yup.string().required("Last Name is Required"),
+    email: Yup.string().required("Email is Required"),
+    password: Yup.string().required("Password is Required"),
+    PhoneNumber: Yup.string().required("Phone number is required"),
   });
+
   const navigate = useNavigate();
   const initialState = {
     name: "",
     lastName: "",
     email: "",
     password: "",
+    PhoneNumber: "",
   };
   const [data, setdata] = useState(initialState);
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
+    console.log("in handleSubmit");
     try {
       setErrors({});
       e.preventDefault();
       await validationSchema.validate(data, { abortEarly: false });
       dispatch(registerUser());
-      const response = await axios.post(`${REGISTER_URL}/register`, {
-        name: data.name,
-        lastName: data.lastName,
-        email: data.email,
-        password: data.password,
-      });
+      console.log("in before Url");
+      const response = await axios.post(
+        `${REGISTER_URL}/register`,
+        {
+          name: data.name,
+          lastName: data.lastName,
+          email: data.email,
+          password: data.password,
+          PhoneNumber: data.PhoneNumber,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("in after Url");
       console.log("in handleSubmit", response);
       dispatch(registerSuccess(response.data));
       setdata({ ...initialState, success: true });
@@ -99,7 +127,7 @@ export default function SignInSide() {
         }));
       });
   };
-  console.log(data);
+
   return (
     <Container maxWidth="lg">
       <ThemeProvider theme={defaultTheme}>
@@ -146,6 +174,13 @@ export default function SignInSide() {
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
+              {/* <Stack
+                direction="row"
+                spacing={2}
+                sx={{ marginBottom: "-80px", padding: "12px" }}
+              >
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              </Stack> */}
               <Box
                 component="form"
                 noValidate
@@ -194,6 +229,19 @@ export default function SignInSide() {
                     />
                   </Grid>
                   <Grid item xs={12}>
+                    <MuiTelInput
+                      fullWidth
+                      autoFocus
+                      value={data.PhoneNumber}
+                      id="phoneNumber"
+                      label="Phone Number"
+                      autoComplete="Number"
+                      onChange={handleChangee}
+                      // error={Boolean(errors.PhoneNumber)}
+                      // helperText={errors.PhoneNumber}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
                     <TextField
                       required
                       fullWidth
@@ -209,6 +257,7 @@ export default function SignInSide() {
 
                     {/*nodemailer  iwor qwag qsrq radx */}
                   </Grid>
+
                   <Grid item xs={12}>
                     <FormControlLabel
                       control={
@@ -241,29 +290,3 @@ export default function SignInSide() {
     </Container>
   );
 }
-//
-// <TextField
-//               margin="normal"
-//               required
-//               fullWidth
-//               id="password"
-//               label="password"
-//               name="password"
-//               autoComplete="text"
-//               type={data.showPassword ? "text" : "password"}
-//               value={data.password}
-//               autoFocus
-//               onChange={handleInputChange}
-//               error={errors.password}
-//               helperText={errors.password}
-//               InputProps={{
-//                 endAdornment: (
-//                   <InputAdornment
-//                     position="end"
-//                     onClick={handlePasswordVisibilityToggle}
-//                   >
-//                     {data.showPassword ? <Visibility /> : <VisibilityOff />}
-//                   </InputAdornment>
-//                 ),
-//               }}
-//             />

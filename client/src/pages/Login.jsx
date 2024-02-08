@@ -20,6 +20,8 @@ import { loginSucess, loginUser } from "../redux/authSlice";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Copyright(props) {
   return (
     <Typography
@@ -61,13 +63,13 @@ export default function SignInSide() {
       e.preventDefault();
       await validationSchema.validate(data, { abortEarly: false });
       dispatch(loginUser());
+      toast.success("Login Succesfull");
       const response = await axios.post(`${LOGIN_URl}/login`, {
         email: data.email,
         password: data.password,
       });
       console.log("in handleSubmit", response);
       dispatch(loginSucess({ user: data, token: response.data.createToken }));
-      //  dispatch(loginSuccess({ user: data, token: res.data.token }));
       setdata({ ...initialState, success: true });
       setTimeout(() => {
         setdata({ ...data, success: false });
@@ -85,11 +87,13 @@ export default function SignInSide() {
         console.error("Error during validation:", error);
       }
       setErrors(validationErrors);
+      toast.error("check your email and password ");
     }
   };
   const validationSchema = Yup.object({
     email: Yup.string().required("Email is required"),
     password: Yup.string().required("password is required "),
+    // phoneNumber: Yup.number().required("Phone Number is required"),
   });
   const handleChnage = (e) => {
     const { name, value } = e.target;
@@ -236,6 +240,7 @@ export default function SignInSide() {
           </Grid>
         </Grid>
       </ThemeProvider>
+      <ToastContainer />
     </Container>
   );
 }

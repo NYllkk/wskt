@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { FaRegSmile } from "react-icons/fa";
 import SendIcon from "@mui/icons-material/Send";
-import { user } from "../components/Join";
 import { useSelector } from "react-redux";
 const url = "http://localhost:2000";
 const Centre = () => {

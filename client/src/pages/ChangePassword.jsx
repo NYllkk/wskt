@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Box,
   Button,
@@ -15,8 +17,6 @@ import { createTheme } from "@mui/material/styles";
 import * as Yup from "yup";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-// import plane from "";
-
 const theme = createTheme({
   breakpoints: {},
 });
@@ -24,9 +24,17 @@ const theme = createTheme({
 const ChangePassword = () => {
   const navigate = useNavigate();
   const validationSchema = Yup.object({
-    password: Yup.string().required("password is required"),
-    ReEnterPassword: Yup.string().required("password is required "),
+    password: Yup.string()
+      .matches(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+        "Password must contain at least one uppercase, one lowercase, one number, and be at least 8 characters long."
+      )
+      .required("Password is required"),
+    ReEnterPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords do not match")
+      .required("Confirm Password is required"),
   });
+
   const initialState = {
     password: "",
     ReEnterPassword: "",
@@ -70,12 +78,12 @@ const ChangePassword = () => {
   const ChnagePasswordApi = import.meta.env.VITE_BACKEND_URL;
   console.log(ChnagePasswordApi, "in ChnagePasswordApi ");
   console.log(data, "in handleChnage");
+
   const handleSubmit = async (e) => {
     setErrors({});
     e.preventDefault();
     try {
       await validationSchema.validate(data, { abortEarly: false });
-
       const response = await axios.post(
         `${ChnagePasswordApi}/reset`,
         {
@@ -90,6 +98,7 @@ const ChangePassword = () => {
       console.log(response, "HERE GETTING THE API RESPONSE");
       setdata({ ...initialState, success: true });
       navigate("/log");
+      toast.success("Login Succesfull");
     } catch (error) {
       console.log("error consoling", error);
       const validationErrors = {};
@@ -101,6 +110,7 @@ const ChangePassword = () => {
         console.error("Error during validation:", error);
       }
       setErrors(validationErrors);
+      toast.error("Validation errors. Please check the form. ");
     }
   };
 
@@ -170,6 +180,7 @@ const ChangePassword = () => {
           </Link>
         </Card>
       </Container>
+      <ToastContainer />
     </ThemeProvider>
   );
 };
@@ -212,3 +223,5 @@ export default ChangePassword;
 //     setErrors(validationErrors);
 //   }
 // };
+
+//

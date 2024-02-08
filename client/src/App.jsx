@@ -8,6 +8,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ChangePassword from "./pages/ChangePassword.jsx";
+import Sidebar from "../src/pages/Sidebar.jsx";
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" Component={Register} />
         <Route path="/forgot" Component={ForgotPassword} />
         <Route path="/change" Component={ChangePassword} />
+        <Route path="/side" Component={Sidebar} />
       </Routes>
     </>
   );

@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-
 require("dotenv").config();
 
 const createToken = (payload, expiresIn) => {
@@ -9,4 +8,19 @@ const createToken = (payload, expiresIn) => {
     // return RES(res, STATUS.OK, "created TOKEn ", token)
     return token
 };
-module.exports = createToken
+const convertArrayValuesToSingle = (obj) => {
+    for (const prop in obj) {
+        if (Array.isArray(obj[prop])) {
+            obj[prop] = obj[prop][0];
+        }
+    }
+    return obj;
+};
+let processFormFields = (arr) => {
+    let processedFields = {};
+    for (const [key, value] of Object.entries(arr)) {
+        processedFields[key] = Array.isArray(value) ? value[0] : value;
+    }
+    return processedFields;
+};
+module.exports = { createToken, convertArrayValuesToSingle, processFormFields }

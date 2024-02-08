@@ -8,7 +8,9 @@ const app = express();
 const port = 2000;
 const users = {};
 const sequelize = require("./sequelize.js")
-const router = require("./router/routes.js")
+const router = require("./router/routes.js");
+const morgan = require("morgan");
+app.use(morgan('dev'))
 
 app.use(express.json());
 app.use(cors());
