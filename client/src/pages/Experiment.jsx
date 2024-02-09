@@ -1,7 +1,5 @@
-import { Box, Container } from "@mui/material";
 import React from "react";
 import Header from "../components/Header";
-// import Footer from "../components/Footer";
 import Centre from "../components/Centre";
 
 const Experiment = () => {
@@ -13,5 +11,4 @@ const Experiment = () => {
     </>
   );
 };
-
 export default Experiment;

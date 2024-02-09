@@ -65,7 +65,6 @@ const Centre = () => {
         data.id
       );
     });
-
     return () => {
       socket.disconnect();
     };

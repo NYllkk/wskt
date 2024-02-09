@@ -9,7 +9,7 @@
 
 //     // Listen for "helloFromServer" message from the server
 //     socket.on("helloFromServer", (data) => {
-//  Added Profile and Phone Number Field in in REgistration Api and worked on Chat Template 
+
 //             console.log("Received hello from server:", data);
 //     });
 //         // Send a "basicsFromClient" message to the server

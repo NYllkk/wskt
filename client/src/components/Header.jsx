@@ -14,7 +14,7 @@ import { MdKeyboardBackspace, MdCall } from "react-icons/md";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { user } from "../components/Join";
+
 import { useSelector } from "react-redux";
 
 const pages = ["Products", "Pricing", "Blog"];
@@ -30,10 +30,7 @@ const Header = () => {
   };
   return (
     <AppBar position="static">
-      <Container
-        maxWidth="100%"
-        sx={{ backgroundColor: "#055558", width: "100%" }}
-      >
+      <Box maxWidth="100%" sx={{ backgroundColor: "#055558", width: "100%" }}>
         <Toolbar disableGutters sx={{}}>
           <Link to="/chat" style={{ textDecoration: "none" }}>
             <MdKeyboardBackspace
@@ -171,7 +168,7 @@ const Header = () => {
             </Menu>
           </Box>
         </Toolbar>
-      </Container>
+      </Box>
     </AppBar>
   );
 };

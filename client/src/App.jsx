@@ -9,22 +9,28 @@ import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ChangePassword from "./pages/ChangePassword.jsx";
 import Sidebar from "../src/pages/Sidebar.jsx";
+import Api from "./api/Api.jsx";
+
 function App() {
   return (
     <>
+      {/* inside side i have to show ex */}
       <Routes>
         <Route path="/reg" Component={Join} />
         <Route path="/chat" Component={Chat} />
         <Route path="/private" Component={Private} />
-        <Route path="/ex" Component={Experiment} />
-        {/*  */}
         <Route path="/log" Component={Login} />
         <Route path="/" Component={Register} />
         <Route path="/forgot" Component={ForgotPassword} />
         <Route path="/change" Component={ChangePassword} />
-        <Route path="/side" Component={Sidebar} />
+        <Route path="/side/*" Component={Sidebar} />
+        <Route path="/api" Component={Api} />
       </Routes>
     </>
   );
 }
 export default App;
+{
+  /* <Route path="/acc/*" element={<Account />} /> in acc we have header acc component */
+}
+//
