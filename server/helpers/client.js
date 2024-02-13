@@ -15,8 +15,14 @@
 //         // Send a "basicsFromClient" message to the server
 //         socket.emit("basicsFromClient", "Basics from client!");
 //   });
-//  
-//  
+//
+//  implementing the functionality for searching in the user list and creating a template for the logout .
+
+
+
+
+
+
 //   socket.on("disconnect", () => {
 //             console.log("Disconnected from the server");
 //   });

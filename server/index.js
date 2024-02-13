@@ -11,7 +11,6 @@ const sequelize = require("./sequelize.js")
 const router = require("./router/routes.js");
 const morgan = require("morgan");
 app.use(morgan('dev'))
-
 app.use(express.json());
 app.use(cors());
 // app.get("/", (req, res) => {

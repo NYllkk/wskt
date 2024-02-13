@@ -17,18 +17,23 @@ import { SiRoamresearch } from "react-icons/si";
 import { LuMessageSquarePlus } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData } from "../redux/dataSlice";
-
+import { debounce } from "../common/debounce";
 const drawerWidth = 400;
 function ResponsiveDrawer(props) {
   const data = useSelector((state) => state.data.data);
-  console.log(data, "in selector data from data");
-  const dispatch = useDispatch();
+  console.log(data, "in selector data from data in Sidebar");
+  // const dispatch = useDispatch();
   const { window } = props;
   // upeer from the state from store
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+
   const [page, setPage] = useState();
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -41,10 +46,10 @@ function ResponsiveDrawer(props) {
       setMobileOpen(!mobileOpen);
     }
   };
-  const handleChange = (event, value) => {
-    setPage(1);
-    setSearchTerm(value);
-  };
+  // const handleChange = (event, value) => {
+  //   setPage(1);
+  //   setSearchTerm(value);
+  // };
   const drawer = (
     // whole backColor
     <Box
@@ -55,7 +60,6 @@ function ResponsiveDrawer(props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          // gap: "",
           padding: "20px",
           color: "white",
         }}
@@ -95,7 +99,9 @@ function ResponsiveDrawer(props) {
           placeholder="Search Here"
           inputProps={{ "aria-label": "search Here......" }}
           value={searchTerm}
-          onChange={(e) => handleChange(e, e.target.value)}
+          onChange={handleSearch}
+          // value={searchTerm}
+          // onChange={(e) => handleChange(e, e.target.value)}
         />
         <IconButton
           type="button"
@@ -106,9 +112,10 @@ function ResponsiveDrawer(props) {
           <SearchIcon sx={{ marginLeft: "120px" }} />
         </IconButton>
       </Box>
+
       <List>
         {/* <UserLIst /> */}
-        <Api />
+        <Api searchTerm={searchTerm} />
       </List>
       {/* here i wil lshow contact  */}
       <List></List>
@@ -184,183 +191,39 @@ ResponsiveDrawer.propTypes = {
 };
 
 export default ResponsiveDrawer;
-
-// import CardContent from "@mui/material/CardContent";
-
-// import { Box, Container, Grid, Typography } from "@mui/material";
-// import Paper from "@mui/material/Paper";
+//
+// ResponsiveDrawer.js
+// import { useState } from "react";
+// import Drawer from "@mui/material/Drawer";
+// import List from "@mui/material/List";
 // import InputBase from "@mui/material/InputBase";
-// import Divider from "@mui/material/Divider";
-// import IconButton from "@mui/material/IconButton";
 // import SearchIcon from "@mui/icons-material/Search";
+// import Api from "../api/Api";
 
-// import axios from "axios";
-// import Buttonn from "../components/constants/Button";
-// import { IoGridOutline } from "react-icons/io5";
-// import { BiMap } from "react-icons/bi";
+// const ResponsiveDrawer = () => {
+//   const [searchTerm, setSearchTerm] = useState("");
 
-// import { useNavigate } from "react-router-dom";
-// import Mycomponent from "./Mycomponent.jsx";
-
-// const GoogleMap = ({}) => {
-//   const navigate = useNavigate();
-//   const [data, setdata] = useState([]);
-
-//   // work here lkewjwehjidehifdhifhiehfiehfiheifheihfi
-//   //   new handleChange
-
-//   const [page, setPage] = React.useState(1);
-//   const [searchTerm, setSearchTerm] = React.useState("");
-//   const itemsPerPage = 4;
-
-//   const handleChange = (event, value) => {
-//     setPage(1);
-//     setSearchTerm(value);
+//   const handleSearch = (e) => {
+//     setSearchTerm(e.target.value);
 //   };
 
-//   // ///l3eidodoeudouudiduiuidihdi
-//   useEffect(() => {
-//     axios
-//       .get("https://642d4d6dbf8cbecdb4027745.mockapi.io/plane")
-//       .then((res) => setdata(res.data))
-//       .catch((err) => console.log(err));
-//   }, []);
-//   console.log(data, "in gogole map");
-//   const filteredData = data.filter((item) =>
-//     item.name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-
-//   const startIndex = (page - 1) * itemsPerPage;
-//   const endIndex = startIndex + itemsPerPage;
-
 //   return (
-//     <>
-//       <Box
-//         sx={{
-//           backgroundColor: "#4D0179",
-//           height: "50px",
-//           margin: "20px",
-//           color: "white",
-//           display: "flex",
-//           alignContent: "center",
-//           alignItems: "center",
-//         }}
-//       >
-//         Events
-//       </Box>
+//     <div>
+//       {/* Search Box */}
+//       <div>
+//         <InputBase
+//           placeholder="Search Here"
+//           inputProps={{ "aria-label": "search Here" }}
+//           value={searchTerm}
+//           onChange={handleSearch}
+//         />
+//         <SearchIcon />
+//       </div>
 
-//       <Box
-//         sx={{
-//           display: "flex",
-//           flexDirection: "column",
-//           alignItems: "flex-start",
-//           [breakpoints.md]: {
-//             flexDirection: "row",
-//             alignItems: "center",
-//             justifyContent: "space-between",
-//           },
-//         }}
-//       >
-//         <Grid item xs={8}>
-//           {/* search box */}
-//           <Paper
-//             component="form"
-//             sx={{
-//               p: "2px 4px",
-//               display: "flex",
-//               alignItems: "center",
-//               borderRadius: "120px",
-//               marginRight: "300px",
-//               bgcolor: "",
-//               marginLeft: "20px",
-//             }}
-//           >
-//             <Box
-//               sx={{
-//                 borderRadius: "12px",
-//                 borderColor: "black",
-//                 borderStyle: "",
-//                 display: "flex",
-//                 flexDirection: "row",
-//                 justifyContent: "space-between",
-//               }}
-//             >
-//               <InputBase
-//                 sx={{ ml: 1, flex: 1 }}
-//                 placeholder="Search Here"
-//                 inputProps={{ "aria-label": "search Here" }}
-//                 value={searchTerm}
-//                 onChange={(e) => handleChange(e, e.target.value)}
-//               />
-//               <IconButton
-//                 type="button"
-//                 sx={{ p: "10px" }}
-//                 aria-label="search"
-//                 disableRipple
-//               >
-//                 <SearchIcon sx={{ marginLeft: "120px" }} />
-//               </IconButton>
-//             </Box>
-//           </Paper>
-//           {/* new component will gets add here  */}
-//           {/* search box end  */}
-//           <Grid>
-//             <Grid
-//               item
-//               xs={12}
-//               md={8}
-//               sx={{
-//                 marginLeft: "444px",
-//                 marginTop: "-34px",
-//                 display: "flex",
-//                 justifyContent: "end",
-//                 gap: "12px",
-//                 marginRight: "15px",
-//                 alignContent: "",
-//                 alignItems: "",
-//               }}
-//             >
-//               <div>View as:</div>
-//               <div>
-//                 {" "}
-//                 <IoGridOutline onClick={handleGridClick} />{" "}
-//               </div>
-//               <div>
-//                 <BiMap onClick={handleMapClick} />
-//               </div>
-//             </Grid>
-//             <CardContent></CardContent>
-//           </Grid>
-//         </Grid>
-//       </Box>
-//     </>
+//       {/* User List */}
+//       <Api searchTerm={searchTerm} />
+//     </div>
 //   );
 // };
 
-//  in side bar //////////////////////
-
-// import { useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchData, selectData } from 'path-to-your-slice';
-
-// const YourComponent = () => {
-//   const dispatch = useDispatch();
-//   const data = useSelector(selectData);
-
-//   useEffect(() => {
-
-//     dispatch(fetchData())
-//       .then((response) => {
-//         console.log(response, "Fetched data successfully");
-//       })
-//       .catch((error) => {
-
-//         console.error('Error fetching data:', error);
-//       });
-//   }, [dispatch]);
-
-//   console.log(data, "Console logging data from Redux store");
-
-// };
-
-// export default YourComponent;
+// export default ResponsiveDrawer;

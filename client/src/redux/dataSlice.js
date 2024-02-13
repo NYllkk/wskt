@@ -20,9 +20,7 @@ export const dataSlice = createSlice({
         searchTerm: '',
     },
     reducers: {
-        setSearchTerm: (state, action) => {
-            state.searchTerm = action.payload;
-        },
+
     },
     extraReducers: (builder) => {
         builder
@@ -39,5 +37,5 @@ export const dataSlice = createSlice({
             });
     },
 });
-export const selectSearchTerm = (state) => state.data.searchTerm
+
 export default dataSlice.reducer;

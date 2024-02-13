@@ -3,39 +3,37 @@ import axios from "axios";
 import UserList from "../components/UserLIst.jsx";
 import { useDispatch } from "react-redux";
 
-const Api = () => {
-  // const dispatch = useDispatch();
-
+const Api = ({ searchTerm }) => {
   const [data, setData] = useState([]);
+  const handleSearch = () => {
+    console.log("clicked handleSearched");
+  };
+  const apiData = async () => {
+    try {
+      const response = await axios.get(
+        "https://642d4d6dbf8cbecdb4027745.mockapi.io/plane"
+      );
+      searchTerm;
+      console.log(response.data, "in api.js");
+      setData(response.data);
+    } catch (error) {
+      console.error(error, "errorrr");
+    }
+  };
   useEffect(() => {
-    axios
-      .get("https://642d4d6dbf8cbecdb4027745.mockapi.io/plane")
-      .then((res) => {
-        console.log(res.data, "in api.js");
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err, "errorrr");
-      });
+    apiData();
   }, []);
+  const filteredData = data.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  console.log(filteredData, "in here with filter data");
   return (
     <div>
-      {data.map((user) => (
-        <UserList data={user} key={user.id} />
+      {filteredData.map((user) => (
+        <UserList data={user} key={user.id} onClick={handleSearch} />
       ))}
     </div>
   );
 };
 
 export default Api;
-
-//
-
-// import { useDispatch } from "react-redux";
-// import { fetchData } from "./path-to-your-slice";
-
-// const dispatch = useDispatch();
-
-// useEffect(() => {
-//   dispatch(fetchData());
-// }, [dispatch]);

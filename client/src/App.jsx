@@ -23,14 +23,12 @@ function App() {
         <Route path="/" Component={Register} />
         <Route path="/forgot" Component={ForgotPassword} />
         <Route path="/change" Component={ChangePassword} />
-        <Route path="/side/*" Component={Sidebar} />
+        <Route path="/side" Component={Sidebar} />
         <Route path="/api" Component={Api} />
       </Routes>
     </>
   );
 }
 export default App;
-{
-  /* <Route path="/acc/*" element={<Account />} /> in acc we have header acc component */
-}
+
 //

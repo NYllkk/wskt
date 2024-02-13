@@ -27,9 +27,9 @@ const User = sequelize.define("User", {
       allowNull: true
    },
    PhoneNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      type: DataTypes.STRING
    }
+
 
 });
 
