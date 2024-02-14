@@ -18,9 +18,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { SpeedDial, styled } from "@mui/material";
 import { logout } from "../redux/authSlice";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import persistor from "../redux/store";
 import LogoutIcon from "@mui/icons-material/Logout";
-const Header = () => {
+const Header = ({ val }) => {
+  const [store, setStore] = React.useState(val);
+  React.useEffect(() => {
+    setStore(val);
+  }, [val]);
+  console.log(store, " store getting from props in Header");
+  localStorage.setItem("NAME", store);
+  const finalName = JSON.parse(localStorage.getItem("NAMEEEEE"));
+  console.log(finalName, "so finallt ");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -28,25 +35,15 @@ const Header = () => {
     marginBottom: "20px",
     "& .MuiSpeedDial-fab": {
       backgroundColor: "#055558",
-      // varient: "",
       padding: "12px",
       gap: "12px",
       marginLeft: "-12px",
-      // norderRadius: "12px",
-      // marginBottom: "120px",
     },
   }));
-
-  // { icon: <SaveIcon />, name: "Save" },
-
   const [direction, setDirection] = React.useState("down");
   const pages = ["Products", "Pricing", "Blog"];
   const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-  const name = useSelector((state) => state.auth?.user?.user?.email);
-  console.log(name, "having value of name");
-  // const state = useSelector((state) => state);
-  // console.log(state, "state");
   const handleVideo = () => {
     console.log("Clicked on handleVideo");
   };
@@ -64,7 +61,6 @@ const Header = () => {
     // persistor.purge();
     navigate("/log");
   };
-
   return (
     <AppBar position="static">
       <Box maxWidth="100%" sx={{ backgroundColor: "#055558", width: "100%" }}>
@@ -89,7 +85,7 @@ const Header = () => {
             }}
           >
             <IconButton sx={{ p: 0 }}>
-              <Avatar alt={name} src="/static/images/avatar/2.jpg" />
+              <Avatar alt={finalName} src="/static/images/avatar/2.jpg" />
             </IconButton>
           </Typography>
           <Box
@@ -104,14 +100,12 @@ const Header = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              //   onClick={handleOpenNavMenu}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
-              //   anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
                 horizontal: "left",
@@ -121,7 +115,6 @@ const Header = () => {
                 vertical: "top",
                 horizontal: "left",
               }}
-              //   open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
@@ -164,7 +157,7 @@ const Header = () => {
             }}
           >
             <h4>
-              {name} <br />
+              {finalName} <br />
             </h4>
           </Box>
           <Box sx={{ flexGrow: 0, backgroundColor: "#", color: "white" }}>
@@ -181,7 +174,6 @@ const Header = () => {
               >
                 <FaVideo onClick={handleVideo} />
                 <MdCall onClick={handleCall} />
-                {/* <BiDotsVerticalRounded  /> */}
 
                 <StyledSpeedDial
                   sx={{
@@ -192,7 +184,6 @@ const Header = () => {
                   ariaLabel="speed dial"
                   icon={<BiDotsVerticalRounded />}
                   direction={direction}
-                  // color="white"
                 >
                   <SpeedDialAction
                     sx={{ backgroundColor: "#055558", color: "white" }}
@@ -202,13 +193,10 @@ const Header = () => {
                   />
                 </StyledSpeedDial>
               </IconButton>
-
-              {/* </IconButton> */}
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
-              //   anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "right",
@@ -218,7 +206,6 @@ const Header = () => {
                 vertical: "top",
                 horizontal: "right",
               }}
-              //   open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (

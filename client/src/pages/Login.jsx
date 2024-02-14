@@ -57,7 +57,6 @@ export default function SignInSide() {
   const handlepasswordToggle = () => {
     setshoPassword(!showPassword);
   };
-
   const handleSubmit = async (e) => {
     try {
       setErrors({});
@@ -115,8 +114,6 @@ export default function SignInSide() {
           [name]: error.message,
         }));
       });
-    // console.log("here i ant to see name ", name);
-    // console.log("handleChnage", data);
   };
   return (
     <Container maxWidth="lg">

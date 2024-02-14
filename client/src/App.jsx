@@ -23,8 +23,9 @@ function App() {
         <Route path="/" Component={Register} />
         <Route path="/forgot" Component={ForgotPassword} />
         <Route path="/change" Component={ChangePassword} />
-        <Route path="/side" Component={Sidebar} />
+        <Route path="/side/*" Component={Sidebar} />
         <Route path="/api" Component={Api} />
+        {/* <Route path="/side/:id" Component={Experiment} /> */}
       </Routes>
     </>
   );
@@ -32,3 +33,18 @@ function App() {
 export default App;
 
 //
+//  <Routes>
+//    {/* <Route path="" element={<Api />} /> */}
+//    <Route path="" element={<ResetPassword />} />
+//    <Route path="booking" element={<Api />} />
+//    <Route path="payment" element={<Payment />} />
+//    <Route path="subsciption" element={<Subscriptions />} />
+//    <Route path="memories" element={<MemoriesAPI />} />
+//    <Route path="/memoriesdetails/:id" element={<MemoriesDeatils />} />
+//  </Routes>;
+//
+//
+//  in main route file
+{
+  /* <Route path="/acc/*" element={<Account />} />; */
+}

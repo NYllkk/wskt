@@ -12,7 +12,10 @@ const Centre = () => {
   const [socket, setSocket] = useState(null);
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-  const user = useSelector((state) => state.auth?.user?.user?.email);
+
+  // const user = useSelector((state) => state.auth?.user?.user?.email);
+
+  const user = JSON.parse(localStorage.getItem("NAMEEEEE"));
   const handleEmojiSelect = (emoji) => {
     setSelectedEmoji(emoji);
     // setIsEmojiPickerOpen(false);
@@ -20,7 +23,7 @@ const Centre = () => {
   const handleToggleEmojiPicker = () => {
     setIsEmojiPickerOpen((prev) => !prev);
   };
-  console.log(selectedEmoji, "in here with selected emoji");
+  // console.log(selectedEmoji, "in here with selected emoji");
   const sendChat = () => {
     const userInput = document.getElementById("userInput").value;
     console.log(userInput, "here in userInputValue ");
@@ -68,7 +71,7 @@ const Centre = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [user]);
   return (
     <>
       <Box

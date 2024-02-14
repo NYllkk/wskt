@@ -16,21 +16,20 @@ import { CiMenuKebab } from "react-icons/ci";
 import { SiRoamresearch } from "react-icons/si";
 import { LuMessageSquarePlus } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchData } from "../redux/dataSlice";
 import { debounce } from "../common/debounce";
+import { Route, Routes, useParams } from "react-router-dom";
 const drawerWidth = 400;
 function ResponsiveDrawer(props) {
   const data = useSelector((state) => state.data.data);
-  console.log(data, "in selector data from data in Sidebar");
+  // console.log(data, "in selector data from data in Sidebar");
   // const dispatch = useDispatch();
   const { window } = props;
   // upeer from the state from store
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-
-  const [page, setPage] = useState();
-
+  // const { id } = useParams();
+  // console.log(id, "in sidebar getting id ");
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -46,10 +45,10 @@ function ResponsiveDrawer(props) {
       setMobileOpen(!mobileOpen);
     }
   };
-  // const handleChange = (event, value) => {
-  //   setPage(1);
-  //   setSearchTerm(value);
-  // };
+  const handleClick = () => {
+    // console.log("handleClick");
+  };
+
   const drawer = (
     // whole backColor
     <Box
@@ -112,11 +111,11 @@ function ResponsiveDrawer(props) {
           <SearchIcon sx={{ marginLeft: "120px" }} />
         </IconButton>
       </Box>
-
-      <List>
+      {/* upper to have position fixed  */}
+      <Box>
         {/* <UserLIst /> */}
-        <Api searchTerm={searchTerm} />
-      </List>
+        <Api searchTerm={searchTerm} onClick={handleClick} />
+      </Box>
       {/* here i wil lshow contact  */}
       <List></List>
     </Box>
@@ -125,63 +124,69 @@ function ResponsiveDrawer(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   return (
-    <Box sx={{ display: "flex", backgroundColor: "" }}>
-      <CssBaseline />
-      <AppBar
-        style={{ backgroundColor: "" }}
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      ></AppBar>
-      <Box
-        style={{ backgroundColor: "blue" }}
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
-          ModalProps={{
-            keepMounted: true,
-          }}
+    <>
+      <Box sx={{ display: "flex", backgroundColor: "" }}>
+        <CssBaseline />
+        <AppBar
+          style={{ backgroundColor: "" }}
+          position="fixed"
           sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+          }}
+        ></AppBar>
+        <Box
+          style={{ backgroundColor: "blue" }}
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onTransitionEnd={handleDrawerTransitionEnd}
+            onClose={handleDrawerClose}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+        <Box
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
+          <Routes>
+            <Route path="/:id" Component={Experiment} />
+          </Routes>
+
+          {/* <Experiment /> */}
+        </Box>
       </Box>
-      <Box
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Experiment />
-      </Box>
-    </Box>
+    </>
     // <Box>wqd</Box>
   );
 }
@@ -191,39 +196,20 @@ ResponsiveDrawer.propTypes = {
 };
 
 export default ResponsiveDrawer;
+
 //
-// ResponsiveDrawer.js
-// import { useState } from "react";
-// import Drawer from "@mui/material/Drawer";
-// import List from "@mui/material/List";
-// import InputBase from "@mui/material/InputBase";
-// import SearchIcon from "@mui/icons-material/Search";
-// import Api from "../api/Api";
+// const EventDetails = () => {
+//   let { id } = useParams();
+//   const [eventData, setEventData] = useState(null);
 
-// const ResponsiveDrawer = () => {
-//   const [searchTerm, setSearchTerm] = useState("");
-
-//   const handleSearch = (e) => {
-//     setSearchTerm(e.target.value);
-//   };
-
-//   return (
-//     <div>
-//       {/* Search Box */}
-//       <div>
-//         <InputBase
-//           placeholder="Search Here"
-//           inputProps={{ "aria-label": "search Here" }}
-//           value={searchTerm}
-//           onChange={handleSearch}
-//         />
-//         <SearchIcon />
-//       </div>
-
-//       {/* User List */}
-//       <Api searchTerm={searchTerm} />
-//     </div>
-//   );
-// };
-
-// export default ResponsiveDrawer;
+//   useEffect(() => {
+//     axios
+//       .get(`https://642d4d6dbf8cbecdb4027745.mockapi.io/plane/${id}`)
+//       .then((res) => setEventData(res.data))
+//       .catch((errors) => {
+//         console.log(errors);
+//       });
+//   }, [id]);
+//   console.log(eventData, "check details");
+//   console.log(id, "in event details");
+// }
