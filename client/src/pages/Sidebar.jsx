@@ -179,11 +179,7 @@ function ResponsiveDrawer(props) {
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
-          <Routes>
-            <Route path="/:id" Component={Experiment} />
-          </Routes>
-
-          {/* <Experiment /> */}
+          <Experiment />
         </Box>
       </Box>
     </>

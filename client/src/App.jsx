@@ -10,11 +10,11 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ChangePassword from "./pages/ChangePassword.jsx";
 import Sidebar from "../src/pages/Sidebar.jsx";
 import Api from "./api/Api.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 
 function App() {
   return (
     <>
-      {/* inside side i have to show ex */}
       <Routes>
         <Route path="/reg" Component={Join} />
         <Route path="/chat" Component={Chat} />
@@ -25,26 +25,10 @@ function App() {
         <Route path="/change" Component={ChangePassword} />
         <Route path="/side/*" Component={Sidebar} />
         <Route path="/api" Component={Api} />
-        {/* <Route path="/side/:id" Component={Experiment} /> */}
+        <Route path="/:id" Component={Experiment} />
+        <Route path="/pro" Component={UserProfile} />
       </Routes>
     </>
   );
 }
 export default App;
-
-//
-//  <Routes>
-//    {/* <Route path="" element={<Api />} /> */}
-//    <Route path="" element={<ResetPassword />} />
-//    <Route path="booking" element={<Api />} />
-//    <Route path="payment" element={<Payment />} />
-//    <Route path="subsciption" element={<Subscriptions />} />
-//    <Route path="memories" element={<MemoriesAPI />} />
-//    <Route path="/memoriesdetails/:id" element={<MemoriesDeatils />} />
-//  </Routes>;
-//
-//
-//  in main route file
-{
-  /* <Route path="/acc/*" element={<Account />} />; */
-}

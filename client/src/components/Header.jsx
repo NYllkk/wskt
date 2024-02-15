@@ -65,7 +65,7 @@ const Header = ({ val }) => {
     <AppBar position="static">
       <Box maxWidth="100%" sx={{ backgroundColor: "#055558", width: "100%" }}>
         <Toolbar disableGutters sx={{}}>
-          <Link to="/chat" style={{ textDecoration: "none" }}>
+          <Link to="/side" style={{ textDecoration: "none" }}>
             <MdKeyboardBackspace
               style={{ marginRight: "30px", color: "white" }}
             />
@@ -84,9 +84,12 @@ const Header = ({ val }) => {
               textDecoration: "none",
             }}
           >
-            <IconButton sx={{ p: 0 }}>
-              <Avatar alt={finalName} src="/static/images/avatar/2.jpg" />
-            </IconButton>
+            <Link to="/pro" style={{ textDecoration: "none" }}>
+              {" "}
+              <IconButton sx={{ p: 0 }}>
+                <Avatar alt={finalName} src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Link>
           </Typography>
           <Box
             sx={{

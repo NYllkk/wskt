@@ -6,7 +6,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Avatar, Badge, Button, Stack } from "@mui/material";
-//
 
 const UserLIst = ({ data, onClick }) => {
   const theme = useTheme();
