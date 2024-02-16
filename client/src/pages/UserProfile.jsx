@@ -11,6 +11,7 @@ import {
   Input,
   InputAdornment,
   InputBase,
+  Popover,
   TextField,
   Typography,
 } from "@mui/material";
@@ -26,7 +27,14 @@ import { LuMessageSquarePlus } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import EditIcon from "@mui/icons-material/Edit";
 import { debounce } from "../common/debounce";
-import { Link, Route, Routes, json, useParams } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  json,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import FinalProfile from "../components/FinalProfile";
 import { MdKeyboardBackspace } from "react-icons/md";
 const drawerWidth = 400;
@@ -37,11 +45,56 @@ function ResponsiveDrawer(props) {
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  //
   const [selectedImage, setSelectedImage] = useState(null);
-  const [name, setName] = useState({
+  const initialState = {
     name: "",
-  });
-
+  };
+  const [name, setName] = useState(initialState);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setName({
+      ...name,
+      [name]: value,
+    });
+  };
+  //
+  const [anchorEl, setAnchorEl] = useState(null);
+  const Navigate = useNavigate();
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlelogout = (e) => {
+    e.preventDefault();
+    dispatch(logout);
+    Navigate("/log");
+    console.log("looged");
+  };
+  const CreateGroup = () => {
+    navigate("/group");
+    console.log("in createGropu");
+  };
+  const NewCommunity = () => {
+    console.log("new Community");
+  };
+  const MessageStarred = () => {
+    console.log("messageStarred");
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleMenu = () => {
+    console.log("in handleMenu");
+  };
+  const handleGroup = () => {
+    console.log("in HandleGroup");
+  };
+  const handleMessage = () => {
+    console.log("handleMEssage");
+  };
+  const handle = () => {
+    console.log("in handleCLick with handle");
+  };
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -57,17 +110,9 @@ function ResponsiveDrawer(props) {
       setMobileOpen(!mobileOpen);
     }
   };
-  const handleClick = () => {
-    // console.log("handleClick");
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setName({
-      ...name,
-      [name]: value,
-    });
-  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+  const navigate = useNavigate();
   console.log(name, "here ");
   const gettingVal = JSON.parse(localStorage.getItem("NAMEEEEE"));
   console.log(gettingVal, "in USERPROFILE");
@@ -95,9 +140,37 @@ function ResponsiveDrawer(props) {
             gap: "30px",
           }}
         >
-          <GroupsIcon />
-          <LuMessageSquarePlus /> <SiRoamresearch />
-          <CiMenuKebab />
+          <GroupsIcon onClick={handleGroup} />
+          <LuMessageSquarePlus onClick={handleMessage} />
+          <SiRoamresearch onClick={handle} />
+          <CiMenuKebab aria-describedby={id} onClick={handleClick} />
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "center",
+              horizontal: "center",
+            }}
+          >
+            <Typography sx={{ p: 2 }} onClick={CreateGroup}>
+              New Group
+            </Typography>
+            <Typography sx={{ p: 2 }} onClick={NewCommunity}>
+              New Community
+            </Typography>
+            <Typography sx={{ p: 2 }} onClick={MessageStarred}>
+              Starred Message
+            </Typography>
+            <Typography sx={{ p: 2 }} onClick={handlelogout}>
+              Logout
+            </Typography>
+          </Popover>
         </Box>
       </Box>
       <Box
@@ -216,7 +289,7 @@ function ResponsiveDrawer(props) {
           <Box
             sx={{
               backgroundColor: "#055558",
-              height: "9vh",
+              height: "65px",
               color: "white",
               display: "flex",
               alignContent: "center",
@@ -241,8 +314,6 @@ function ResponsiveDrawer(props) {
               alignItems: "centre",
               flexDirection: "column",
               backgroundColor: "whitesmoke",
-              // marginLeft: "50vh",
-              // width: "100px",
               padding: "6vh",
               height: "100%",
               gap: "6vh",
@@ -274,8 +345,11 @@ function ResponsiveDrawer(props) {
                     xl: "350px",
                   },
                 }}
-              />
+              >
+                <EditIcon />
+              </Avatar>
             </label>
+
             <Box
               sx={{
                 backgroundColor: "#f8f9fa",
@@ -365,61 +439,3 @@ ResponsiveDrawer.propTypes = {
 };
 
 export default ResponsiveDrawer;
-
-//
-// import React, { useState } from 'react';
-// import Avatar from '@mui/material/Avatar';
-// import Input from '@mui/material/Input';
-
-// const ImageUploadAvatar = ({ gettingVal }) => {
-//   const [selectedImage, setSelectedImage] = useState(null);
-
-//   const handleImageChange = (event) => {
-//     const file = event.target.files[0];
-
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         setSelectedImage(reader.result);
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
-//   return (
-//     <div>
-// {
-//   <Input
-//     type="file"
-//     accept="image/*"
-//     onChange={handleImageChange}
-//     style={{ display: "none" }}
-//     id="image-upload-input"
-//   />;
-//   <label htmlFor="image-upload-input">
-//     <Avatar
-//       alt={gettingVal}
-//       src={selectedImage || "/static/images/avatar/2.jpg"}
-//       sx={{
-//         width: 170,
-//         height: 170,
-//         justifyContent: "center",
-//         justifyItems: "center",
-//         display: "flex",
-//         cursor: "pointer",
-//         marginLeft: {
-//           xs: "10px",
-//           sm: "20px",
-//           md: "30px",
-//           lg: "340px",
-//           xl: "350px",
-//         },
-//       }}
-//     />
-//   </label>;
-// }
-//     </div>
-//   );
-// };
-
-// export default ImageUploadAvatar;

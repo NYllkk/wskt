@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import { Avatar, InputBase } from "@mui/material";
+import { Avatar, Button, InputBase, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Api from "../api/Api";
 import { useState, useEffect } from "react";
@@ -17,19 +17,28 @@ import { SiRoamresearch } from "react-icons/si";
 import { LuMessageSquarePlus } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "../common/debounce";
-import { Route, Routes, useParams } from "react-router-dom";
+
+import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import Popover from "@mui/material/Popover";
+
+import {
+  Dialog,
+  DialogActions,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+import { logout } from "../redux/authSlice";
 const drawerWidth = 400;
 function ResponsiveDrawer(props) {
   const data = useSelector((state) => state.data.data);
-  // console.log(data, "in selector data from data in Sidebar");
-  // const dispatch = useDispatch();
+
   const { window } = props;
-  // upeer from the state from store
+
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  // const { id } = useParams();
-  // console.log(id, "in sidebar getting id ");
+  // const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -45,80 +54,163 @@ function ResponsiveDrawer(props) {
       setMobileOpen(!mobileOpen);
     }
   };
-  const handleClick = () => {
-    // console.log("handleClick");
+  const handleOpen = (e) => {
+    console.log("in handleMenu");
+    e.preventDefault();
+    setOpen(true);
+    console.log("after set open true");
   };
 
+  // const handleClick = () => {
+  //   // console.log("handleClick");
+  // };
+  const handleMenu = () => {
+    console.log("in handleMenu");
+  };
+  const handleGroup = () => {
+    console.log("in HandleGroup");
+  };
+  const handleMessage = () => {
+    console.log("handleMEssage");
+  };
+  const handle = () => {
+    console.log("in handleCLick with handle");
+  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const Navigate = useNavigate();
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handlelogout = (e) => {
+    e.preventDefault();
+    dispatch(logout);
+    Navigate("/log");
+    console.log("looged");
+  };
+  const CreateGroup = () => {
+    navigate("/group");
+    console.log("in createGropu");
+  };
+  const NewCommunity = () => {
+    console.log("new Community");
+  };
+  const MessageStarred = () => {
+    console.log("messageStarred");
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+  const navigate = useNavigate();
   const drawer = (
     // whole backColor
-    <Box
-      style={{ backgroundColor: "#055558", height: "64px", position: "sticky" }}
-    >
+    <>
       <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px",
-          color: "white",
+        style={{
+          backgroundColor: "#055558",
+          height: "64px",
+          position: "sticky",
         }}
       >
-        <Avatar />
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "centre",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: "30px",
+            padding: "20px",
+            color: "white",
           }}
         >
-          <GroupsIcon />
-          <LuMessageSquarePlus /> <SiRoamresearch />
-          <CiMenuKebab />
+          <Avatar />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "centre",
+              alignItems: "center",
+              gap: "30px",
+            }}
+          >
+            <GroupsIcon onClick={handleGroup} />
+            <LuMessageSquarePlus onClick={handleMessage} />
+            <SiRoamresearch onClick={handle} />
+            <CiMenuKebab aria-describedby={id} onClick={handleClick} />
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "center",
+                horizontal: "center",
+              }}
+            >
+              <Typography sx={{ p: 2 }} onClick={CreateGroup}>
+                New Group
+              </Typography>
+              <Typography sx={{ p: 2 }} onClick={NewCommunity}>
+                New Community
+              </Typography>
+              <Typography sx={{ p: 2 }} onClick={MessageStarred}>
+                Starred Message
+              </Typography>
+              <Typography sx={{ p: 2 }} onClick={handlelogout}>
+                Logout
+              </Typography>
+            </Popover>
+          </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          color: "black",
-          backgroundColor: "whitesmoke",
-          borderRadius: "30px",
-          borderColor: "black",
-          display: "flex",
-          flexDirection: "",
-          margin: "10px",
-        }}
-      >
-        <InputBase
+        <Box
           sx={{
-            backgroundColor: "whitesmoke",
-            borderRadius: "20px",
             color: "black",
+            backgroundColor: "whitesmoke",
+            borderRadius: "30px",
+            borderColor: "black",
+            display: "flex",
+            flexDirection: "",
+            margin: "10px",
           }}
-          placeholder="Search Here"
-          inputProps={{ "aria-label": "search Here......" }}
-          value={searchTerm}
-          onChange={handleSearch}
-          // value={searchTerm}
-          // onChange={(e) => handleChange(e, e.target.value)}
-        />
-        <IconButton
-          type="button"
-          sx={{ p: "10px" }}
-          aria-label="search here "
-          disableRipple
         >
-          <SearchIcon sx={{ marginLeft: "120px" }} />
-        </IconButton>
+          <InputBase
+            sx={{
+              backgroundColor: "whitesmoke",
+              borderRadius: "20px",
+              color: "black",
+            }}
+            placeholder="Search Here"
+            inputProps={{ "aria-label": "search Here......" }}
+            value={searchTerm}
+            onChange={handleSearch}
+            // value={searchTerm}
+            // onChange={(e) => handleChange(e, e.target.value)}
+          />
+          <IconButton
+            type="button"
+            sx={{ p: "10px" }}
+            aria-label="search here"
+            disableRipple
+          >
+            <SearchIcon sx={{ marginLeft: "120px" }} />
+          </IconButton>
+        </Box>
+        {/* upper to have position fixed  */}
+        <Box>
+          {/* <UserLIst /> */}
+          <Api searchTerm={searchTerm} onClick={handleClick} />
+        </Box>
+        {/* here i wil lshow contact  */}
+        <List></List>
       </Box>
-      {/* upper to have position fixed  */}
-      <Box>
-        {/* <UserLIst /> */}
-        <Api searchTerm={searchTerm} onClick={handleClick} />
-      </Box>
-      {/* here i wil lshow contact  */}
-      <List></List>
-    </Box>
+    </>
   );
 
   const container =
@@ -182,6 +274,9 @@ function ResponsiveDrawer(props) {
           <Experiment />
         </Box>
       </Box>
+      {/* <Box> */}
+
+      {/* </Box> */}
     </>
     // <Box>wqd</Box>
   );
@@ -192,20 +287,3 @@ ResponsiveDrawer.propTypes = {
 };
 
 export default ResponsiveDrawer;
-
-//
-// const EventDetails = () => {
-//   let { id } = useParams();
-//   const [eventData, setEventData] = useState(null);
-
-//   useEffect(() => {
-//     axios
-//       .get(`https://642d4d6dbf8cbecdb4027745.mockapi.io/plane/${id}`)
-//       .then((res) => setEventData(res.data))
-//       .catch((errors) => {
-//         console.log(errors);
-//       });
-//   }, [id]);
-//   console.log(eventData, "check details");
-//   console.log(id, "in event details");
-// }
