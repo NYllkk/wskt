@@ -16,7 +16,6 @@ const Api = ({ searchTerm, onClick }) => {
         "https://642d4d6dbf8cbecdb4027745.mockapi.io/plane"
       );
       searchTerm;
-      // console.log(response.data, "in api.js");
       setData(response.data);
     } catch (error) {
       console.error(error, "errorrr");
@@ -32,9 +31,11 @@ const Api = ({ searchTerm, onClick }) => {
     localStorage.setItem("NAMEEEEE", JSON.stringify(user.name));
     // console.log(user.name, "here getting id ");
   };
+  //
   const filteredData = data.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  //
   // console.log(filteredData, "in here with filter data");
   return (
     <>

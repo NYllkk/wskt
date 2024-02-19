@@ -12,6 +12,7 @@ import Sidebar from "../src/pages/Sidebar.jsx";
 import Api from "./api/Api.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import Group from "./pages/Group.jsx";
+import GroupList from "../src/pages/GroupList.jsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/:id" Component={Experiment} />
         <Route path="/pro" Component={UserProfile} />
         <Route path="/group" Component={Group} />
+        <Route path="/grouplist" Component={GroupList} />
       </Routes>
     </>
   );

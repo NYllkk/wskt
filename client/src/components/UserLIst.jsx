@@ -109,6 +109,11 @@ export default UserLIst;
 //         title="Card Image"
 //         style={{ width: "215px", height: "120px", borderRadius: "15px" }}
 //       />
+
+//  on the sidebar component.
+// Added a dialog to the sidebar component for adding group.
+// In the chat component, added options.
+// Worked on the create group component to add users
 //       <CardContent>
 //         <Typography variant="h6" component="div">
 //           {text}
