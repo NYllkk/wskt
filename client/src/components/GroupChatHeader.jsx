@@ -19,18 +19,23 @@ import { SpeedDial, styled } from "@mui/material";
 import { logout } from "../redux/authSlice";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import LogoutIcon from "@mui/icons-material/Logout";
+import axios from "axios";
 
-const Header = ({ val }) => {
+const GroupChatHeader = ({ val, data }) => {
   const [store, setStore] = React.useState(val);
   React.useEffect(() => {
     setStore(val);
   }, [val]);
   console.log(store, " store getting from props in Header");
+
   localStorage.setItem("NAME", store);
   const finalName = JSON.parse(localStorage.getItem("NAMEEEEE"));
   console.log(finalName, "so finallt ");
+
+  const list = JSON.parse(localStorage.getItem("FINALUSERLIST"));
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     backgroundColor: "#055558",
     marginBottom: "20px",
@@ -41,6 +46,11 @@ const Header = ({ val }) => {
       marginLeft: "-12px",
     },
   }));
+  //  JSON.stringify(
+  //    localStorage.setItem("GROUP-DETAIL", response.data.GroupName)
+  //  );
+  const getName = localStorage.getItem("GROUP-DETAIL");
+  console.log(getName);
   const [direction, setDirection] = React.useState("down");
   const pages = ["Products", "Pricing", "Blog"];
   const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -62,15 +72,35 @@ const Header = ({ val }) => {
     // persistor.purge();
     navigate("/log");
   };
+  const [dataaaa, setdata] = React.useState([]);
+  const getData = async () => {
+    const response = await axios
+      .get("http://localhost:2000/api/group/get")
+      .then((res) => setdata(res.dataaaa))
+      .catch((err) => console.log("error", err));
+    console.log("datatattat", response);
+  };
+  React.useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <AppBar position="static">
-      <Box maxWidth="100%" sx={{ backgroundColor: "#055558", width: "100%" }}>
+      <Box
+        maxWidth="100%"
+        sx={{
+          backgroundColor: "#055558",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Toolbar disableGutters sx={{}}>
-          <Link to="/side" style={{ textDecoration: "none" }}>
-            <MdKeyboardBackspace
-              style={{ marginRight: "30px", color: "white" }}
-            />
-          </Link>
+          {/* <Link to="/side" style={{ textDecoration: "none" }}> */}
+          <MdKeyboardBackspace
+            style={{ marginRight: "30px", color: "white" }}
+          />
+          {/* </Link> */}
           <Typography
             variant="h6"
             noWrap
@@ -85,12 +115,46 @@ const Header = ({ val }) => {
               textDecoration: "none",
             }}
           >
-            <Link to="/pro" style={{ textDecoration: "none" }}>
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt={finalName} src="/static/images/avatar/2.jpg" />
-              </IconButton>
+            <Link to="/grouplist" style={{ textDecoration: "none" }}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <IconButton sx={{ p: 0 }}>
+                  <Avatar
+                    alt={getName}
+                    src="/static/images/avatar/2.jpg"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      flexWrap: "wrap",
+                    }}
+                  />
+                  {/* wd {data.Groupname} */}
+                  <h5
+                    style={{
+                      color: "white",
+                      marginLeft: "12px",
+                    }}
+                  >
+                    {getName}
+                  </h5>
+                </IconButton>
+              </Box>
             </Link>
           </Typography>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignContent: "centre",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            Group Members:
+            {list.map((group) => (
+              <p key={group.id}> {group.name}</p>
+            ))}
+          </div>
           <Box
             sx={{
               flexGrow: 1,
@@ -123,11 +187,11 @@ const Header = ({ val }) => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
+              {/* {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
-              ))}
+              ))} */}
             </Menu>
           </Box>
           <Typography
@@ -159,9 +223,13 @@ const Header = ({ val }) => {
               },
             }}
           >
-            <h4>
-              {finalName} <br />
-            </h4>
+            {/* <div>
+              <ul>
+                {data.map((item) => (
+                  <li key={item.id}>{item.name}</li>
+                ))}
+              </ul>
+            </div> */}
           </Box>
           <Box sx={{ flexGrow: 0, backgroundColor: "#", color: "white" }}>
             <Tooltip>
@@ -177,7 +245,7 @@ const Header = ({ val }) => {
               >
                 <FaVideo onClick={handleVideo} />
                 <MdCall onClick={handleCall} />
-
+                {/* {data} */}
                 <StyledSpeedDial
                   sx={{
                     width: "15px",
@@ -223,4 +291,6 @@ const Header = ({ val }) => {
     </AppBar>
   );
 };
-export default Header;
+export default GroupChatHeader;
+
+//

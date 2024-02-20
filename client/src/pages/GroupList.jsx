@@ -1,22 +1,3 @@
-// import { Box } from "@mui/material";
-// import React, { useState } from "react";
-
-// const GroupList = () => {
-//   const GetttingList = JSON.parse(localStorage.getItem("FINALUSERLIST")) || [];
-
-//   return (
-//     <Box>
-//       {GetttingList.map((user) => (
-//         <div key={user.id}>
-//           <p>{user.name}</p>
-//         </div>
-//       ))}
-//     </Box>
-//   );
-// };
-
-// export default GroupList;
-//
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -60,6 +41,8 @@ import {
 } from "react-router-dom";
 import FinalProfile from "../components/FinalProfile";
 import { MdKeyboardBackspace } from "react-icons/md";
+import GroupChat from "./GroupChat";
+import { logout } from "../redux/authSlice";
 const drawerWidth = 400;
 
 function ResponsiveDrawer(props) {
@@ -70,6 +53,9 @@ function ResponsiveDrawer(props) {
   const [isClosing, setIsClosing] = useState(false);
   //
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showExperiment, setShowExperiment] = useState(true);
+  const [value, setvalue] = useState([]);
+
   const initialState = {
     groupName: "",
     GroupDescription: "",
@@ -82,11 +68,13 @@ function ResponsiveDrawer(props) {
       [name]: value,
     });
   };
-  console.log(listdata);
+  const navigate = useNavigate();
+  // console.log(listdata);
   //
   const [anchorEl, setAnchorEl] = useState(null);
   const Navigate = useNavigate();
   const GetttingList = JSON.parse(localStorage.getItem("FINALUSERLIST")) || [];
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -139,10 +127,10 @@ function ResponsiveDrawer(props) {
   const handleSubmitGroup = async () => {
     try {
       const response = await axios.post(
-        "https://642d4d6dbf8cbecdb4027745.mockapi.io/plane",
+        "http://localhost:2000/api/group/create",
         {
-          name: listdata.groupName,
-          time: listdata.GroupDescription,
+          groupName: listdata.groupName,
+          GroupDescription: listdata.GroupDescription,
         },
         {
           headers: {
@@ -151,18 +139,21 @@ function ResponsiveDrawer(props) {
         }
       );
       console.log("API response:", response.data);
-      navigate("/chats");
+      JSON.stringify(
+        localStorage.setItem("GROUP-DETAIL", response.data.GroupName)
+      );
+      // setShowExperiment((prev) => !prev);
+      navigate("/GroupChat");
     } catch (error) {
       console.error("Error submitting group:", error);
     }
   };
-
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  const navigate = useNavigate();
-  console.log(name, "here ");
+
+  // console.log(name, "here ");
   const gettingVal = JSON.parse(localStorage.getItem("NAMEEEEE"));
-  console.log(gettingVal, "in USERPROFILE");
+  // console.log(gettingVal, "in USERPROFILE");
   const drawer = (
     // whole backColor
     <Box
@@ -314,7 +305,7 @@ function ResponsiveDrawer(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   const handleImageChange = (event) => {
-    console.log("here i am ");
+    // console.log("here i am ");
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -375,9 +366,12 @@ function ResponsiveDrawer(props) {
             {drawer}
           </Drawer>
         </Box>
+      </Box>
+      {showExperiment && showExperiment ? (
         <Box
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
+            marginLeft: "400px",
           }}
         >
           {/* <Container maxWidth="sm"> */}
@@ -535,7 +529,12 @@ function ResponsiveDrawer(props) {
 
           {/* </Container> */}
         </Box>
-      </Box>
+      ) : (
+        <Box sx={{ marginLeft: "400px" }}>
+          {/* here have to map the api and return in group chat  */}
+          <GroupChat />
+        </Box>
+      )}
     </>
     // <Box>wqd</Box>
   );

@@ -12,7 +12,7 @@
 //     // Send a "hello" message to the client upon connection
 //     socket.emit("helloFromServer", "Hello from the server!");
 
-//  creating Forgot password Api  and Template & integrate user  
+//  c
 //     // Listen for "basicsFromClient" message from the client
 //     socket.on("basicsFromClient", (data) => {
 //         console.log("Received basics from client:", data);

@@ -36,6 +36,11 @@ io.on("connection", (socket) => {
             message: `Welcome to the chat ${users[socket.id]} `,
             online: `${socket.id} is online `
         });
+        socket.emit("welcometoGroup", {
+            user: "",
+            message: ` ${users[socket.id]} Group Got Created`,
+            online: `${socket.id} is online `
+        })
     });
     socket.on("message", ({ userInput: message, id }) => {
         console.log("Received message:", message, "from user with id:", id, "for other Route");
@@ -87,61 +92,3 @@ server.listen(port, () => {
         process.exit(1);
     }
 })();
-
-
-
-
-// .................................................//
-// const express = require('express');
-// const cors = require('cors');
-// const app = express();
-// const passport = require("./passport/GoogleStrategy");
-// const session = require('express-session');
-// const ejs = require('ejs');
-// const sequelize = require('./sequlize');
-// const router = require('./routes/routes');
-// const Employee = require('./db/models/Employee');
-// // const paymentIntentent = require("./stripe/stripe")
-// // const stripe = require("./stripe/stripe.js")
-// // socket on sequelize
-// app.use(session({
-//     secret: 'thgtrhhhythtyuyjuh',
-//     resave: false,
-//     saveUninitialized: true,
-// }));
-// app.set('view engine', 'ejs');
-// app.set('views', __dirname + '/view');
-// app.use(cors());
-// app.use(express.json());
-// app.use(passport.initialize());
-// app.use(passport.session());
-// app.use('/api', router);
-// // index.js
-// console.log('Server is starting...');
-// const PORT = process.env.PORT || 2000;
-
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
-// passport.serializeUser((user, done) => {
-//     done(null, user.id);
-// });
-// passport.deserializeUser(async (id, done) => {
-//     try {
-//         const user = await Employee.findById(id);
-//         done(null, user);
-//     } catch (error) {
-//         done(error, null);
-//     }
-// });
-// (async () => {
-//     try {
-//         await sequelize.authenticate();
-//         console.log('Database connection successful!');
-//         await sequelize.sync();
-//         console.log('Database synchronization successful');
-//     } catch (error) {
-//         console.error('Unable to connect to the database or synchronize:', error);
-//         process.exit(1);
-//     }
-// })();

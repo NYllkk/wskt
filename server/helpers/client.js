@@ -2,34 +2,31 @@
 // <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
 
 // <!--Your HTML content-- >
-//     <script>
+//     <sectionsscript>
 //         const socket = io("http://localhost:3000"); 
 //   socket.on("connect", () => {
 //             console.log("Connected to the server");
 
 //     // Listen for "helloFromServer" message from the server
 //     socket.on("helloFromServer", (data) => {
-// 
+
 //             console.log("Received hello from server:", data);
 //     });
 //         // Send a "basicsFromClient" message to the server
 //         socket.emit("basicsFromClient", "Basics from client!");
 //   });
-//
-// 
 
 
 
-
-
-
-
+// Worked on the backend API to add the group name and description fields.
+//  Implemented the UI layout for the group chat, 
+// integrated the updated backend API with the front - end components of the group chat.
 
 
 //   socket.on("disconnect", () => {
 //             console.log("Disconnected from the server");
 //   });
-//     </script>
+//     </sectionsscript>
 // 
 // 
 //  here creating token 
