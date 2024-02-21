@@ -63,12 +63,13 @@ export default function SignInSide() {
       e.preventDefault();
       await validationSchema.validate(data, { abortEarly: false });
       dispatch(loginUser());
-      toast.success("Login Succesfull");
+
       const response = await axios.post(`${LOGIN_URl}/login`, {
         email: data.email,
         password: data.password,
       });
       console.log("in handleSubmit", response);
+      toast.success("Login Succesfull");
       dispatch(loginSucess({ user: data, token: response.data.createToken }));
       setdata({ ...initialState, success: true });
       setTimeout(() => {

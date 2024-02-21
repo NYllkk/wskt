@@ -93,6 +93,7 @@ const GroupChatHeader = ({ val, data }) => {
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          height: "65px",
         }}
       >
         <Toolbar disableGutters sx={{}}>

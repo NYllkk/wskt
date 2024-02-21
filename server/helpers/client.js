@@ -18,16 +18,12 @@
 
 
 
-// Worked on the backend API to add the group name and description fields.
-//  Implemented the UI layout for the group chat, 
-// integrated the updated backend API with the front - end components of the group chat.
-
 
 //   socket.on("disconnect", () => {
 //             console.log("Disconnected from the server");
 //   });
 //     </sectionsscript>
-// 
+// loader added toast addng dialog
 // 
 //  here creating token 
 // const isAdmin = (req, res, next) => {
@@ -51,5 +47,7 @@
 //         console.error(error);
 //         return RES(res, STATUS.UNAUTHORIZED, 'Invalid token');
 //     }
-// };
+// }; backend API to add the group name and description fields.
+//  Implemented the UI layout for the group chat,
+//    
 // module.exports = isAdmin;

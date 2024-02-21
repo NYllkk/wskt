@@ -14,7 +14,7 @@ import UserProfile from "./pages/UserProfile.jsx";
 import Group from "./pages/Group.jsx";
 import GroupList from "../src/pages/GroupList.jsx";
 import GroupChat from "./pages/GroupChat.jsx";
-
+import GroupChatCentre from "./pages/GroupChatCentre.jsx";
 function App() {
   return (
     <>
@@ -33,8 +33,10 @@ function App() {
         <Route path="/group" Component={Group} />
         <Route path="/grouplist" Component={GroupList} />
         <Route path="/GroupChat" Component={GroupChat} />
+        <Route path="/hi" Component={GroupChatCentre} />
       </Routes>
     </>
   );
 }
 export default App;
+// have to insert groupchat in right side of group list

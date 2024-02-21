@@ -77,7 +77,6 @@ const Register = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -169,9 +168,18 @@ const ResetPassword = async (req, res) => {
     }
 };
 
+const getUserList = async (req, res) => {
+    try {
+        const userData = await User.findAll({});
+        return res.json({ userData });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 
+}
 
-module.exports = { Register, login, forgotpasword, ResetPassword }
+module.exports = { Register, login, forgotpasword, ResetPassword, getUserList }
 
 
 

@@ -36,12 +36,34 @@ io.on("connection", (socket) => {
             message: `Welcome to the chat ${users[socket.id]} `,
             online: `${socket.id} is online `
         });
-        socket.emit("welcometoGroup", {
-            user: "",
-            message: ` ${users[socket.id]} Group Got Created`,
-            online: `${socket.id} is online `
-        })
+        // socket.emit("welcometoGroup", {
+        //     user: "",
+        //     message: ` ${users[socket.id]}  Got Created`,
+        //     online: `${socket.id} is online `
+        // })
     });
+    // 
+    socket.on('createGroup', (groupName) => {
+        console.log(groupName, "in groupName")
+        io.emit('welcometoGroup', {
+            user: '',
+            message: `${groupName} Group Got Created`,
+            online: `${socket.id} is online`,
+            groupName: groupName
+        });
+        socket.join(groupName);
+        console.log(groupName, "having name of the group");
+    });
+    socket.on('joinGroup', (groupName) => {
+        socket.join(groupName);
+        socket.emit('welcometoGroup', {
+            user: '',
+            message: `You joined ${groupName} Group`,
+            online: `${socket.id} is online`,
+            groupName: groupName
+        });
+    });
+    // 
     socket.on("message", ({ userInput: message, id }) => {
         console.log("Received message:", message, "from user with id:", id, "for other Route");
         io.emit("sendMessage", { user: users[id], message, id });
@@ -68,6 +90,7 @@ io.on("connection", (socket) => {
         socket.emit("messagetoAll", message)
         console.log(message, "message in messageto all ")
     });
+
     // //////////////////////////
     //  final
     socket.on("disconnect", () => {

@@ -37,6 +37,7 @@ import {
 } from "react-router-dom";
 import FinalProfile from "../components/FinalProfile";
 import { MdKeyboardBackspace } from "react-icons/md";
+import { logout } from "../redux/authSlice";
 const drawerWidth = 400;
 
 function ResponsiveDrawer(props) {
