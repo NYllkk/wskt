@@ -47,7 +47,6 @@
 //         console.error(error);
 //         return RES(res, STATUS.UNAUTHORIZED, 'Invalid token');
 //     }
-// }; backend API to add the group name and description fields.
-//  Implemented the UI layout for the group chat,
+
 //    
 // module.exports = isAdmin;

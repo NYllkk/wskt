@@ -23,16 +23,6 @@ const Group = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
-  // const handleAdd = (index, data) => {
-  //   setSelectedButtonIndexes((prevIndexes) => {
-  //     const updatedIndexes = [...prevIndexes];
-  //     updatedIndexes[index] = !prevIndexes[index];
-  //     console.log(`To Index: ${index}`);
-  //     setCount((prevCount) => prevCount + (updatedIndexes[index] ? 1 : -1));
-  //     JSON.stringify(localStorage.setItem("FINALUSERLIST", data));
-  //     return updatedIndexes;
-  //   });
-  // };
   const handleAdd = (index) => {
     setSelectedButtonIndexes((prevIndexes) => {
       const updatedIndexes = [...prevIndexes];
@@ -41,11 +31,9 @@ const Group = () => {
       setCount((prevCount) => prevCount + (updatedIndexes[index] ? 1 : -1));
       const selectedUsers = data.filter((user, i) => updatedIndexes[i]);
       localStorage.setItem("FINALUSERLIST", JSON.stringify(selectedUsers));
-
       return updatedIndexes;
     });
   };
-
   const theme = createTheme({
     palette: {
       success: {
@@ -78,37 +66,26 @@ const Group = () => {
   );
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ backgroundColor: "#f0f0f0" }}>
-        <Badge
-          badgeContent={count}
-          color="secondary"
-          // sx={{
-          //   display: "flex",
-          //   justifyContent: "flex-end",
-          //   marginLeft: "12px",
-          //   backgroundColor: "#f0f0f0",
-          // }}
-          // anchorOrigin={{
-          //   vertical: "bottom",
-          //   horizontal: "right",
-          // }}
-        >
-          <GroupsIcon color="action" />
-        </Badge>
-        <Button onClick={handleList}> Create </Button>
-        <InputBase
-          sx={{
-            backgroundColor: "whitesmoke",
-            borderRadius: "20px",
-            color: "black",
-            // backgroundColor: "blue",
-            marginLeft: "20px",
-          }}
-          placeholder="Search Here"
-          inputProps={{ "aria-label": "search Here......" }}
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+      <Box>
+        <Box sx={{ backgroundColor: "#f0f0f0" }}>
+          <Badge badgeContent={count} color="secondary">
+            <GroupsIcon color="action" />
+          </Badge>
+          <Button onClick={handleList}> Create </Button>
+          <InputBase
+            sx={{
+              backgroundColor: "whitesmoke",
+              borderRadius: "20px",
+              color: "black",
+              // backgroundColor: "blue",
+              marginLeft: "20px",
+            }}
+            placeholder="Search Here"
+            inputProps={{ "aria-label": "search Here......" }}
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+        </Box>
       </Box>
       <Box
         sx={{

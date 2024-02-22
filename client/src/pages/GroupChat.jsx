@@ -108,7 +108,7 @@ function ResponsiveDrawer(props) {
   };
   const CreateGroup = () => {
     navigate("/group");
-    console.log("in createGropu");
+    console.log("in creating Group");
   };
   const NewCommunity = () => {
     console.log("new Community");
@@ -203,7 +203,9 @@ function ResponsiveDrawer(props) {
             gap: "30px",
           }}
         >
-          <GroupsIcon onClick={handleGroup} />
+          <Link style={{ textDecoration: "none", color: "white" }} to="/group">
+            <GroupsIcon onClick={handleGroup} />
+          </Link>
           <LuMessageSquarePlus onClick={handleMessage} />
           <SiRoamresearch onClick={handle} />
           <CiMenuKebab aria-describedby={id} onClick={handleClick} />

@@ -83,7 +83,6 @@ const GroupChatHeader = ({ val, data }) => {
   React.useEffect(() => {
     getData();
   }, []);
-
   return (
     <AppBar position="static">
       <Box

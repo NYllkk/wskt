@@ -15,6 +15,9 @@ import Group from "./pages/Group.jsx";
 import GroupList from "../src/pages/GroupList.jsx";
 import GroupChat from "./pages/GroupChat.jsx";
 import GroupChatCentre from "./pages/GroupChatCentre.jsx";
+import Rrd from "./pages/Rrd.jsx";
+import Rabout from "./components/Rabout.jsx";
+import BroadCast from "./pages/BroadCast.jsx";
 function App() {
   return (
     <>
@@ -34,6 +37,13 @@ function App() {
         <Route path="/grouplist" Component={GroupList} />
         <Route path="/GroupChat" Component={GroupChat} />
         <Route path="/hi" Component={GroupChatCentre} />
+        <Route path="/broad" Component={BroadCast}></Route>
+        {/* IMPLIMENT NESTED */}
+        <Route path="/hii" Component={Rrd}>
+          <Route path="/hii/ra" Component={Rabout} />
+          <Route path="/hii/ra/hi" Component={GroupChatCentre} />
+        </Route>
+        {/* IMPLIMENT NESTED */}
       </Routes>
     </>
   );
